@@ -4,7 +4,7 @@
     import { browser } from "$app/environment";
     import { getCookie } from "typescript-cookie";
     import { onMount } from "svelte";
-    import { state } from "$lib/state.svelte";
+    import { state as state } from "$lib/state.svelte";
 
     let postContent = "";
 
@@ -42,8 +42,13 @@
 
         if (res.ok) {
             let post = await res.json();
-            posts.push(post);
+
+            post.authorId = state.user;
+
+            posts.unshift(post);
             postContent = "";
+
+            console.log(posts);
         }
     }
 </script>
@@ -81,23 +86,29 @@
                 </div>
             </div>
         {/if}
+
         {#each posts as post}
-            <div class="pt-2 pb-3 px-3 border-b border-b-ctp-surface0">
-                <div class="flex">
-                    <img
-                        src={post.authorId.avatarUrl}
-                        alt={post.authorId.username}
-                        class="w-10 h-10 rounded-full"
-                    />
-                    <div class="ml-2">
+            <div class="pt-2 pb-3 px-3 border-b border-b-ctp-surface0 flex">
+                <img
+                    src={post.authorId.avatarUrl}
+                    alt={post.authorId.username}
+                    class="w-10 h-10 rounded-full"
+                />
+                <div class="ml-2">
+                    <p class="flex">
                         <a
-                            class="text-lg font-bold leading-none"
+                            class="text-xl font-bold leading-none"
                             href={`/@${post.authorId.username}`}
                         >
-                            {post.authorId.username}
+                            {post.authorId.displayName}
                         </a>
-                        <p>{post.content}</p>
-                    </div>
+                        <span
+                            class="text-ctp-subtext0 ml-1 leading-none my-auto"
+                        >
+                            @{post.authorId.username}
+                        </span>
+                    </p>
+                    <p>{post.content}</p>
                 </div>
             </div>
         {/each}
