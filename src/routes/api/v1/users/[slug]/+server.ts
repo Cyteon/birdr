@@ -10,7 +10,9 @@ export async function GET({ params }) {
     return Response.json({ message: "User not found" }, { status: 404 });
   }
 
-  let posts = await Post.find({ authorId: user._id }).limit(50);
+  let posts = await Post.find({ authorId: user._id })
+    .limit(50)
+    .sort({ postedAt: -1 });
 
   return Response.json({
     username: user.username,

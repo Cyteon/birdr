@@ -38,13 +38,13 @@
                 >Home</span
             >
         </a>
+        <!--- Not ready
         <a href="/recent" class={location === "/recent" ? "text-ctp-blue" : ""}>
             <Globe2 size={24} class="my-auto" />
             <span class="ml-2 text-lg font-semibold" hidden={!expanded}
                 >Recent</span
             >
         </a>
-        <!---
         <a
             href="/settings"
             class={location === "/settings" ? "text-ctp-blue" : ""}

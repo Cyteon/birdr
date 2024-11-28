@@ -5,6 +5,7 @@
     import { getCookie } from "typescript-cookie";
     import { onMount } from "svelte";
     import { state as state } from "$lib/state.svelte";
+    import { createTimeString } from "$lib/utils";
 
     let postContent = "";
 
@@ -94,7 +95,7 @@
                     alt={post.authorId.username}
                     class="w-10 h-10 rounded-full"
                 />
-                <div class="ml-2">
+                <div class="ml-2 w-full">
                     <p class="flex">
                         <a
                             class="text-xl font-bold leading-none"
@@ -107,6 +108,9 @@
                         >
                             @{post.authorId.username}
                         </span>
+                        <span class="ml-auto text-ctp-subtext1 text-sm"
+                            >{createTimeString(post.postedAt)}</span
+                        >
                     </p>
                     <p>{post.content}</p>
                 </div>
