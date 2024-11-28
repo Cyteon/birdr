@@ -17,12 +17,9 @@ export async function POST({ request }) {
     );
   }
 
-  const id = typeid("user");
-
   const hashedPassword = await bcrypt.hash(password, 12);
 
-  await User.create({
-    id,
+  let user = await User.create({
     email,
     password: hashedPassword,
     username,
@@ -33,7 +30,7 @@ export async function POST({ request }) {
   crypto.getRandomValues(bytes);
   const token = btoa(String.fromCharCode(...bytes));
 
-  await AuthToken.create({ token, userId: id });
+  await AuthToken.create({ token, userId: user._id });
 
   return Response.json({ message: "Success", token });
 }

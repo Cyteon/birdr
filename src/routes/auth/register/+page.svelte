@@ -115,11 +115,7 @@
             />
 
             <p class="text-ctp-red text-wrap break-all">{error}</p>
-            <button
-                class="w-full bg-ctp-blue text-ctp-crust text-lg p-2 mt-3 rounded-lg"
-            >
-                Register
-            </button>
+            <button class="w-full text-lg mt-1 mb-2 p-2">Register</button>
             <p class="text-ctp-subtext1">
                 Already have an account? <a
                     href="/auth/login"

@@ -36,6 +36,7 @@
 
                 setCookie("token", data.token, {
                     expires: 365,
+                    path: "/",
                 });
 
                 window.location.href = "/";
@@ -75,11 +76,7 @@
             />
 
             <p class="text-ctp-red">{error}</p>
-            <button
-                class="w-full bg-ctp-blue text-ctp-crust text-lg p-2 mt-3 rounded-lg"
-            >
-                Login
-            </button>
+            <button class="w-full text-lg mt-1 mb-2 p-2">Login</button>
             <p class="text-ctp-subtext1">
                 Dont have an account? <a
                     href="/auth/register"

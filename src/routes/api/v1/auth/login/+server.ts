@@ -25,7 +25,7 @@ export async function POST({ request }) {
   crypto.getRandomValues(bytes);
   const token = btoa(String.fromCharCode(...bytes));
 
-  await AuthToken.create({ token, userId: user.id });
+  await AuthToken.create({ token, userId: user._id });
 
   return Response.json({ message: "Success", token });
 }

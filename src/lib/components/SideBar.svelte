@@ -11,9 +11,17 @@
         window.addEventListener("resize", () => {
             phone = window.innerWidth < 768;
         });
+
+        phone = window.innerWidth < 768;
     }
 
     let expanded = false;
+
+    $: if (phone) {
+        expanded = false;
+    } else {
+        expanded = true;
+    }
 </script>
 
 <nav
@@ -23,7 +31,7 @@
 >
     <h1 class="text-lg font-bold">IDK</h1>
 
-    <div class="mt-5 flex flex-col items-center transition-all duration-300">
+    <div class="mt-3 flex flex-col items-center transition-all duration-300">
         <a href="/" class={location === "/" ? "text-ctp-blue" : ""}>
             <Home size={24} class="my-auto" />
             <span class="ml-2 text-lg font-semibold" hidden={!expanded}
@@ -50,7 +58,7 @@
     </div>
 
     <button
-        class="mt-auto text-center transition-colors duration-500 hover:bg-ctp-crust p-1 rounded-md"
+        class="mt-auto text-center transition-colors duration-500 hover:bg-ctp-crust p-1 rounded-md bg-ctp-mantle text-ctp-text"
         on:click={() => (expanded = !expanded)}
     >
         <Menu size={32} />

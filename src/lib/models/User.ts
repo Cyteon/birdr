@@ -1,19 +1,22 @@
 import mongoose from "mongoose";
 
 export interface UserType {
-  id: String;
   email: String;
-  password: String;
+  password: String | null;
   username: String;
   displayName: String;
+  avatarUrl: String;
 }
 
 export const userSchema = new mongoose.Schema<UserType>({
-  id: { type: String, required: true },
   email: { type: String, required: true },
   password: { type: String, required: true },
   username: { type: String, required: true },
   displayName: { type: String, required: false },
+  avatarUrl: {
+    type: String,
+    default: "https://i.imgur.com/Pu8s9rV.png",
+  },
 });
 
-export default mongoose.model("User", userSchema);
+export default mongoose.models.User || mongoose.model("User", userSchema);
