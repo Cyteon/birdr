@@ -15,6 +15,7 @@ export async function GET({ params }) {
     .sort({ postedAt: -1 });
 
   return Response.json({
+    _id: user._id,
     username: user.username,
     displayName: user.displayName,
     avatarUrl: user.avatarUrl,

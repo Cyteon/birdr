@@ -31,6 +31,8 @@
 
         if (res.ok) {
             user = await res.json();
+
+            console.log(user);
         } else {
             notFound = true;
         }
@@ -80,7 +82,7 @@
                     </div>
                 </div>
 
-                {#if _state.user && _state.user.id === user.id}
+                {#if _state.user && _state.user._id == user._id}
                     <textarea
                         class={`
                         w-full p-2 mt-3 border border-ctp-surface0 bg-ctp-mantle rounded-md
