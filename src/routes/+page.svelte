@@ -48,8 +48,6 @@
 
             posts.unshift(post);
             postContent = "";
-
-            console.log(posts);
         }
     }
 </script>
@@ -57,7 +55,7 @@
 <div class="flex h-screen w-full">
     <SideBar />
     <div
-        class={`my-5 py-3 border border-ctp-surface0 rounded-md ${phone ? "w-full mx-2" : "w-2/5 mx-auto"}`}
+        class={`my-5 py-3 border border-ctp-surface0 rounded-md ${phone ? "w-full mx-2" : "w-3/5 mx-auto"}`}
     >
         {#if state.user}
             <div class="pb-2 px-3 mb-2 border-b-4 border-b-ctp-surface0">
@@ -93,26 +91,26 @@
                 <img
                     src={post.authorId.avatarUrl}
                     alt={post.authorId.username}
-                    class="w-10 h-10 rounded-full"
+                    class="w-14 h-14 rounded-full"
                 />
                 <div class="ml-2 w-full">
                     <p class="flex">
                         <a
-                            class="text-xl font-bold leading-none"
+                            class="text-2xl font-bold leading-none"
                             href={`/@${post.authorId.username}`}
                         >
                             {post.authorId.displayName}
                         </a>
                         <span
-                            class="text-ctp-subtext0 ml-1 leading-none my-auto"
+                            class="text-ctp-subtext0 ml-1 mt-[5px] leading-none my-auto"
                         >
                             @{post.authorId.username}
                         </span>
-                        <span class="ml-auto text-ctp-subtext1 text-sm"
+                        <span class="ml-auto text-ctp-subtext1"
                             >{createTimeString(post.postedAt)}</span
                         >
                     </p>
-                    <p>{post.content}</p>
+                    <p class="text-lg">{post.content}</p>
                 </div>
             </div>
         {/each}
