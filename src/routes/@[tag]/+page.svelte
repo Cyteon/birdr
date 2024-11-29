@@ -5,6 +5,7 @@
     import { state as _state } from "$lib/state.svelte";
     import { Send } from "lucide-svelte";
     import { getCookie } from "typescript-cookie";
+    import { createTimeString } from "$lib/utils";
 
     let { data } = $props();
 
@@ -60,7 +61,7 @@
     <div class="flex h-screen w-full">
         <SideBar />
         <div
-            class={`my-5 p-5 border border-ctp-surface0 rounded-md ${phone ? "w-full mx-2" : "w-2/5 mx-auto"}`}
+            class={`my-5 p-5 border border-ctp-surface0 rounded-md ${phone ? "w-full mx-2" : "w-3/5 mx-auto"}`}
         >
             <div class=" border-b-4 border-b-ctp-surface0 pb-4">
                 <div class="flex">
@@ -111,20 +112,23 @@
                     <img
                         src={user.avatarUrl}
                         alt={user.username}
-                        class="w-10 h-10 rounded-full"
+                        class="w-14 h-14 rounded-full"
                     />
-                    <div class="ml-2">
-                        <div class="flex">
-                            <h1 class="text-xl font-bold leading-none">
+                    <div class="ml-2 w-full">
+                        <div class="flex w-full">
+                            <h1 class="text-2xl font-bold leading-none">
                                 {user.displayName}
                             </h1>
                             <span
-                                class="text-ctp-subtext0 ml-1 leading-none my-auto"
+                                class="text-ctp-subtext0 ml-1 mt-[5px] leading-none my-auto"
                             >
                                 @{user.username}
                             </span>
+                            <span class="ml-auto text-ctp-subtext1">
+                                {createTimeString(post.postedAt)}
+                            </span>
                         </div>
-                        <p>{post.content}</p>
+                        <p class="text-lg">{post.content}</p>
                     </div>
                 </div>
             {/each}
