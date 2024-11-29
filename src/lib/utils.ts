@@ -1,3 +1,10 @@
+import { marked } from "marked";
+import DOMPurify from "dompurify";
+
+export function parsePost(text) {
+  return DOMPurify.sanitize(marked(text));
+}
+
 export function createTimeString(str) {
   let now = new Date();
   let date = new Date(str);

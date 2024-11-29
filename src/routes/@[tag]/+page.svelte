@@ -5,7 +5,7 @@
     import { state as _state } from "$lib/state.svelte";
     import { Send } from "lucide-svelte";
     import { getCookie } from "typescript-cookie";
-    import { createTimeString } from "$lib/utils";
+    import { createTimeString, parsePost } from "$lib/utils";
 
     let { data } = $props();
 
@@ -73,7 +73,7 @@
                         class="w-16 h-16 rounded-full"
                     />
                     <div class="ml-2">
-                        <h1 class="text-3xl font-bold leading-none">
+                        <h1 class="text-3xl font-bold leading-none name">
                             {user.displayName}
                         </h1>
                         <p class="text-xl text-ctp-subtext0">
@@ -130,7 +130,7 @@
                                 {createTimeString(post.postedAt)}
                             </span>
                         </div>
-                        <p class="text-lg">{post.content}</p>
+                        <p class="text-lg prose">{@html parsePost(post.content)}</p>
                     </div>
                 </div>
             {/each}

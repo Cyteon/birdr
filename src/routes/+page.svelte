@@ -5,7 +5,7 @@
     import { getCookie } from "typescript-cookie";
     import { onMount } from "svelte";
     import { state as state } from "$lib/state.svelte";
-    import { createTimeString } from "$lib/utils";
+    import { createTimeString, parsePost } from "$lib/utils";
 
     let postContent = "";
 
@@ -110,7 +110,7 @@
                             >{createTimeString(post.postedAt)}</span
                         >
                     </p>
-                    <p class="text-lg">{post.content}</p>
+                    <p class="text-lg prose">{@html parsePost(post.content)}</p>
                 </div>
             </div>
         {/each}
