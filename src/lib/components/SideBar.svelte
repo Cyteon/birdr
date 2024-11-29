@@ -1,6 +1,7 @@
 <script lang="ts">
-    import { Menu, Home, Globe2, Cog } from "lucide-svelte";
+    import { Menu, Home, Globe2, Cog, KeyRound } from "lucide-svelte";
     import { browser } from "$app/environment";
+    import { state } from "$lib/state.svelte";
 
     let location = "";
     let phone = false;
@@ -55,6 +56,23 @@
             >
         </a>
         --->
+        {#if state.user}
+            <a href={`/@${state.user.username}`} class={location === `/@${state.user.username}` ? "text-ctp-blue" : ""}>
+                <img src={state.user.avatarUrl} alt={state.user.username} class="w-6 h-6 rounded-full" />
+                <span class="ml-2 leading-none mt-0.5 text-lg font-semibold" hidden={!expanded}
+                    >Profile</span
+                >
+            </a>
+        {/if}
+
+        {#if !state.user}
+            <a href="/auth/login" class={location === "/auth/login" ? "text-ctp-blue" : ""}>
+                <KeyRound size={24} class="my-auto" />
+                <span class="ml-2 text-lg font-semibold" hidden={!expanded}
+                    >Login</span
+                >
+            </a>
+        {/if}
     </div>
 
     <button
