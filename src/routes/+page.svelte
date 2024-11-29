@@ -55,10 +55,10 @@
 <div class="flex h-screen w-full">
     <SideBar />
     <div
-        class={`my-5 py-3 border border-ctp-surface0 rounded-md ${phone ? "w-full mx-2" : "w-3/5 mx-auto"}`}
+        class={`my-5 pb-3 border border-ctp-surface0 rounded-md ${phone ? "w-full mx-2" : "w-3/5 mx-auto"}`}
     >
         {#if state.user}
-            <div class="pb-2 px-3 mb-2 border-b-4 border-b-ctp-surface0">
+            <div class="pb-2 px-3 mb-2 mt-1 border-b-4 border-b-ctp-surface0">
                 <h1 class="text-xl font-bold mb-2">New Post</h1>
                 <textarea
                     class={`
@@ -87,7 +87,7 @@
         {/if}
 
         {#each posts as post}
-            <div class="pt-2 pb-3 px-3 border-b border-b-ctp-surface0 flex">
+            <div class="py-3 px-3 border-b border-b-ctp-surface0 flex">
                 <img
                     src={post.authorId.avatarUrl}
                     alt={post.authorId.username}
