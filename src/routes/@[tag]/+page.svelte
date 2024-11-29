@@ -60,12 +60,12 @@
 </script>
 
 {#if user}
-    <div class="flex h-screen w-full">
+    <div class="flex min-h-screen w-full">
         <SideBar />
         <div
-            class={`my-5 p-5 border border-ctp-surface0 rounded-md ${phone ? "w-full mx-2" : "w-3/5 mx-auto"}`}
+            class={`my-5 py-3 border border-ctp-surface0 rounded-md ${phone ? "w-full mx-2" : "w-3/5 mx-auto"}`}
         >
-            <div class=" border-b-4 border-b-ctp-surface0 pb-4">
+            <div class="border-b-4 border-b-ctp-surface0 pb-3 px-3">
                 <div class="flex">
                     <img
                         src={user.avatarUrl}
@@ -110,7 +110,7 @@
             </div>
 
             {#each user.posts as post}
-                <div class="py-4 border-b border-b-ctp-surface0 flex">
+                <div class="px-3 py-4 border-b border-b-ctp-surface0 flex">
                     <img
                         src={user.avatarUrl}
                         alt={user.username}

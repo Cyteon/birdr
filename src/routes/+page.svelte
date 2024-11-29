@@ -52,7 +52,7 @@
     }
 </script>
 
-<div class="flex h-screen w-full">
+<div class="flex min-h-screen w-full">
     <SideBar />
     <div
         class={`my-5 pb-3 border border-ctp-surface0 rounded-md ${phone ? "w-full mx-2" : "w-3/5 mx-auto"}`}

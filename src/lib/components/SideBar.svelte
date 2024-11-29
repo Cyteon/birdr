@@ -25,7 +25,7 @@
 </script>
 
 <nav
-    class={`bg-ctp-mantle h-full border-r border-r-ctp-surface0 p-1 py-5 flex flex-col items-center transition-all duration-300 ${
+    class={`bg-ctp-mantle h-screen sticky top-0 border-r border-r-ctp-surface0 p-1 py-5 flex flex-col items-center transition-all duration-300 ${
         expanded ? (phone ? "w-32" : "w-36") : "w-16"
     }`}
 >
