@@ -1,11 +1,22 @@
 import { marked } from "marked";
 import DOMPurify from "dompurify";
 
-export function parsePost(text) {
-  return DOMPurify.sanitize(marked(text));
+export function parsePost(text: string, clip = true, url = "") {
+  if (text.split("\n").length > 5) {
+    text = text.split("\n").slice(0, 5).join("\n");
+    text += ` ... <a href="${url}">Read more</a>`;
+  }
+
+  if (text.length > 500 && clip) {
+    text = text.slice(0, 500) + ` ... <a href="${url}">Read more</a>`;
+  }
+
+  let parsed = DOMPurify.sanitize(marked(text) as string);
+
+  return parsed;
 }
 
-export function createTimeString(str) {
+export function createTimeString(str: string) {
   let now = new Date();
   let date = new Date(str);
 

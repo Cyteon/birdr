@@ -38,13 +38,19 @@ export default {
             "--tw-prose-invert-bullets": theme(`colors.ctp-${accent}.DEFAULT`),
             "--tw-prose-invert-hr": theme(`colors.ctp-${accent}.DEFAULT`),
             "--tw-prose-invert-quotes": theme(`colors.ctp-${accent}.DEFAULT`),
-            "--tw-prose-invert-quote-borders": theme(`colors.ctp-${accent}.DEFAULT`),
+            "--tw-prose-invert-quote-borders": theme(
+              `colors.ctp-${accent}.DEFAULT`,
+            ),
             "--tw-prose-invert-captions": theme(`colors.ctp-${accent}.DEFAULT`),
             "--tw-prose-invert-code": theme("colors.white"),
             "--tw-prose-invert-pre-code": theme(`colors.ctp-${accent}.DEFAULT`),
             "--tw-prose-invert-pre-bg": "rgb(0 0 0 / 50%)",
-            "--tw-prose-invert-th-borders": theme(`colors.ctp-${accent}.DEFAULT`),
-            "--tw-prose-invert-td-borders": theme(`colors.ctp-${accent}.DEFAULT`),
+            "--tw-prose-invert-th-borders": theme(
+              `colors.ctp-${accent}.DEFAULT`,
+            ),
+            "--tw-prose-invert-td-borders": theme(
+              `colors.ctp-${accent}.DEFAULT`,
+            ),
           },
         },
       }),

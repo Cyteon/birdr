@@ -1,7 +1,16 @@
 <script lang="ts">
-    import { Menu, Home, Globe2, Cog, KeyRound } from "lucide-svelte";
+    import {
+        Menu,
+        Home,
+        Globe2,
+        Cog,
+        KeyRound,
+        LogOut,
+        Shield,
+    } from "lucide-svelte";
     import { browser } from "$app/environment";
     import { state } from "$lib/state.svelte";
+    import { removeCookie, getCookie } from "typescript-cookie";
 
     let location = "";
     let phone = false;
@@ -23,6 +32,20 @@
     } else {
         expanded = true;
     }
+
+    async function logOut() {
+        state.user = null;
+
+        await fetch("/api/v1/auth/logout", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${getCookie("token")}`,
+            },
+        });
+
+        removeCookie("token");
+    }
 </script>
 
 <nav
@@ -34,14 +57,14 @@
 
     <div class="mt-3 flex flex-col items-center transition-all duration-300">
         <a href="/" class={location === "/" ? "text-ctp-blue" : ""}>
-            <Home size={24} class="my-auto" />
-            <span class="ml-2 text-lg font-semibold" hidden={!expanded}
+            <Home size={32} class="my-auto" />
+            <span class="ml-2 text-xl my-auto font-semibold" hidden={!expanded}
                 >Home</span
             >
         </a>
         <!--- Not ready
         <a href="/recent" class={location === "/recent" ? "text-ctp-blue" : ""}>
-            <Globe2 size={24} class="my-auto" />
+            <Globe2 size={32} class="my-auto" />
             <span class="ml-2 text-lg font-semibold" hidden={!expanded}
                 >Recent</span
             >
@@ -50,33 +73,66 @@
             href="/settings"
             class={location === "/settings" ? "text-ctp-blue" : ""}
         >
-            <Cog size={24} class="my-auto" />
+            <Cog size={32} class="my-auto" />
             <span class="ml-2 text-lg font-semibold" hidden={!expanded}
                 >Settings</span
             >
         </a>
         --->
         {#if state.user}
-            <a href={`/@${state.user.username}`} class={location === `/@${state.user.username}` ? "text-ctp-blue" : ""}>
-                <img src={state.user.avatarUrl} alt={state.user.username} class="w-6 h-6 rounded-full" />
-                <span class="ml-2 leading-none mt-0.5 text-lg font-semibold" hidden={!expanded}
-                    >Profile</span
+            <a
+                href={`/@${state.user.username}`}
+                class={location === `/@${state.user.username}`
+                    ? "text-ctp-blue"
+                    : ""}
+            >
+                <img
+                    src={state.user.avatarUrl}
+                    alt={state.user.username}
+                    class="w-8 h-8 rounded-full"
+                />
+                <span
+                    class="ml-2 my-auto text-xl font-semibold"
+                    hidden={!expanded}>Profile</span
+                >
+            </a>
+            <button class="unique a-style" on:click={logOut}>
+                <LogOut size={32} class="my-auto" />
+                <span class="ml-2 text-xl font-semibold" hidden={!expanded}
+                    >Logout</span
+                >
+            </button>
+        {/if}
+
+        {#if !state.user}
+            <a
+                href="/auth/login"
+                class={location === "/auth/login" ? "text-ctp-blue" : ""}
+            >
+                <KeyRound size={32} class="my-auto" />
+                <span class="ml-2 text-xl font-semibold" hidden={!expanded}
+                    >Login</span
                 >
             </a>
         {/if}
 
-        {#if !state.user}
-            <a href="/auth/login" class={location === "/auth/login" ? "text-ctp-blue" : ""}>
-                <KeyRound size={24} class="my-auto" />
-                <span class="ml-2 text-lg font-semibold" hidden={!expanded}
-                    >Login</span
+        {#if state?.user?.staff}
+            <hr class="w-full border-ctp-surface1 my-1" />
+
+            <a
+                href="/admin/reports"
+                class={location === "/admin/reports" ? "text-ctp-blue" : ""}
+            >
+                <Shield size={32} class="my-auto" />
+                <span class="ml-2 text-xl font-semibold" hidden={!expanded}
+                    >Reports</span
                 >
             </a>
         {/if}
     </div>
 
     <button
-        class="mt-auto text-center transition-colors duration-500 hover:bg-ctp-crust p-1 rounded-md bg-ctp-mantle text-ctp-text"
+        class="unique mt-auto text-center transition-colors duration-500 hover:bg-ctp-crust p-1 rounded-md bg-ctp-mantle text-ctp-text"
         on:click={() => (expanded = !expanded)}
     >
         <Menu size={32} />
@@ -84,7 +140,8 @@
 </nav>
 
 <style>
-    a {
+    a,
+    .a-style {
         @apply p-2 w-full text-center flex transition-colors duration-500 hover:bg-ctp-crust rounded-md mb-1;
     }
 </style>

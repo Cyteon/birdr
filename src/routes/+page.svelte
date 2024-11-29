@@ -6,6 +6,7 @@
     import { onMount } from "svelte";
     import { state as state } from "$lib/state.svelte";
     import { createTimeString, parsePost } from "$lib/utils";
+    import MessageOptionsDropdown from "$lib/components/MessageOptionsDropdown.svelte";
 
     let postContent = "";
 
@@ -58,8 +59,8 @@
         class={`my-5 pb-3 border border-ctp-surface0 rounded-md ${phone ? "w-full mx-2" : "w-3/5 mx-auto"}`}
     >
         {#if state.user}
-            <div class="pb-2 px-3 mb-2 mt-1 border-b-4 border-b-ctp-surface0">
-                <h1 class="text-xl font-bold mb-2">New Post</h1>
+            <div class="pb-2 px-3 mt-2 border-b-4 border-b-ctp-surface0">
+                <h1 class="text-2xl font-bold mb-2">New Post</h1>
                 <textarea
                     class={`
                     w-full p-2 border border-ctp-surface0 bg-ctp-mantle rounded-md
@@ -106,11 +107,30 @@
                         >
                             @{post.authorId.username}
                         </span>
-                        <span class="ml-auto text-ctp-subtext1"
-                            >{createTimeString(post.postedAt)}</span
-                        >
+
+                        <span class="ml-auto flex">
+                            {#if !phone}
+                                <span class="text-ctp-subtext1"
+                                    >{createTimeString(post.postedAt)}</span
+                                >
+                            {/if}
+
+                            <MessageOptionsDropdown
+                                link={`${
+                                    window.location.origin
+                                }/@${post.authorId.username}/${post._id}`}
+                                content={post.content}
+                                authorId={post.authorId._id}
+                            />
+                        </span>
                     </p>
-                    <p class="text-lg prose">{@html parsePost(post.content)}</p>
+                    <p class="text-lg prose">
+                        {@html parsePost(
+                            post.content,
+                            true,
+                            `/@${post.authorId.username}/${post._id}`,
+                        )}
+                    </p>
                 </div>
             </div>
         {/each}

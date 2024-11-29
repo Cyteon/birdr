@@ -130,7 +130,13 @@
                                 {createTimeString(post.postedAt)}
                             </span>
                         </div>
-                        <p class="text-lg prose">{@html parsePost(post.content)}</p>
+                        <p class="text-lg prose">
+                            {@html parsePost(
+                                post.content,
+                                true,
+                                `/@${user.username}/${post._id}`,
+                            )}
+                        </p>
                     </div>
                 </div>
             {/each}
