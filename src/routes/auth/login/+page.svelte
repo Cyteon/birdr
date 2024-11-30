@@ -71,13 +71,13 @@
                 type="password"
                 id="password"
                 placeholder="Password"
-                class="w-full text-lg p-2 my-2 border-2 border-ctp-base bg-ctp-crust rounded-lg"
+                class="w-full text-lg p-2 my-2 mb-1 border-2 border-ctp-base bg-ctp-crust rounded-lg"
                 bind:value={password}
             />
 
             <p class="text-ctp-red">{error}</p>
-            <button class="w-full text-lg mt-1 mb-2 p-2">Login</button>
-            <p class="text-ctp-subtext1">
+            <button class="w-full text-lg mt-2 p-2">Login</button>
+            <p class="text-ctp-subtext1 mt-2">
                 Dont have an account? <a
                     href="/auth/register"
                     class="text-ctp-blue">Register</a

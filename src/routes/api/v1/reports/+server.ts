@@ -15,7 +15,7 @@ export async function GET({ request }) {
   }
 
   const reports = await Report.find()
-    .populate("postAuthorId", "username displayName avatarUrl")
+    .populate("postAuthorId", "username displayName avatarUrl banned")
     .populate("reporterId", "username displayName avatarUrl")
     .sort({ createdAt: -1 });
 

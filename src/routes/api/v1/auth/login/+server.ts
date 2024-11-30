@@ -21,6 +21,10 @@ export async function POST({ request }) {
     return Response.json({ message: "Invalid credentials" }, { status: 401 });
   }
 
+  if (user.banned) {
+    return Response.json({ message: "You have been banned" }, { status: 403 });
+  }
+
   const bytes = new Uint8Array(48);
   crypto.getRandomValues(bytes);
   const token = btoa(String.fromCharCode(...bytes));

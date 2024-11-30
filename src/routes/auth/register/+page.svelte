@@ -114,9 +114,9 @@
                 bind:value={password}
             />
 
-            <p class="text-ctp-red text-wrap break-all">{error}</p>
-            <button class="w-full text-lg mt-1 mb-2 p-2">Register</button>
-            <p class="text-ctp-subtext1">
+            <p class="text-ctp-red">{error}</p>
+            <button class="w-full text-lg mt-2 p-2">Register</button>
+            <p class="text-ctp-subtext1 mt-2">
                 Already have an account? <a
                     href="/auth/login"
                     class="text-ctp-blue">Login</a
