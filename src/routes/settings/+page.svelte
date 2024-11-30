@@ -41,6 +41,11 @@
         }
 
         if (avatar) {
+            if (avatar.size > 1024 * 1024) {
+                userInfoError = "Avatar must be less than 1MB!";
+                return;
+            }
+
             const base64 = await new Promise<string>((resolve) => {
                 const reader = new FileReader();
 

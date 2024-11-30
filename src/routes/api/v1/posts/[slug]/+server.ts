@@ -32,7 +32,7 @@ export async function GET({ params }) {
 
   let post = await Post.findById(postId).populate(
     "authorId",
-    "username displayName avatarUrl",
+    "username displayName avatarUrl staff",
   );
 
   if (!post) {

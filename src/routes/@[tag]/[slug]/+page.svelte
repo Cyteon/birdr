@@ -4,6 +4,7 @@
     import { browser } from "$app/environment";
     import { onMount } from "svelte";
     import MessageOptionsDropdown from "$lib/components/MessageOptionsDropdown.svelte";
+    import Badges from "$lib/components/Badges.svelte";
 
     let { data } = $props();
 
@@ -58,6 +59,7 @@
                             <h1 class="text-2xl font-bold leading-none">
                                 {post.authorId.displayName}
                             </h1>
+                            <Badges user={post.authorId} small={true} />
                             <span
                                 class="text-ctp-subtext0 ml-1 mt-[5px] leading-none my-auto"
                             >
