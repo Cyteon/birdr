@@ -53,7 +53,7 @@
         expanded ? (phone ? "w-32" : "w-36") : "w-16"
     }`}
 >
-    <h1 class="text-lg font-bold">IDK</h1>
+    <h1 class="text-xl font-bold">Birdr</h1>
 
     <div class="mt-3 flex flex-col items-center transition-all duration-300">
         <a href="/" class={location === "/" ? "text-ctp-blue" : ""}>
