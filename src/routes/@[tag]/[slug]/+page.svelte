@@ -80,7 +80,7 @@
                             </span>
                         </div>
                         <p class="text-lg prose">
-                            {@html parsePost(post.content, false)}
+                            {@html parsePost(post, false)}
                         </p>
                     </div>
                 </div>

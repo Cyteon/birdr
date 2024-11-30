@@ -175,7 +175,7 @@
                         </div>
                         <p class="text-lg prose">
                             {@html parsePost(
-                                post.content,
+                                post,
                                 true,
                                 `/@${user.username}/${post._id}`,
                             )}
