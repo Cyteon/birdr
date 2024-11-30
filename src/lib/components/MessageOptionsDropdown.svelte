@@ -1,11 +1,15 @@
 <script lang="ts">
-    import { Ellipsis, Flag, Copy } from "lucide-svelte";
+    import { Ellipsis, Flag, Copy, Trash } from "lucide-svelte";
+    import { state } from "$lib/state.svelte";
+    import { getCookie } from "typescript-cookie";
 
     export let link = "";
     export let content = "";
     export let authorId = "";
+    export let parent = "";
 
     let reported = false;
+    let deleted = false;
     let open = false;
     let unqiueId = Math.random().toString(36).substring(7);
 
@@ -34,6 +38,20 @@
             reported = true;
         }
     }
+
+    async function _delete(id) {
+        const res = await fetch(`/api/v1/posts/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${getCookie("token")}`,
+            },
+        });
+
+        if (res.ok) {
+            deleted = true;
+        }
+    }
 </script>
 
 <div class="ml-2 my-auto text-ctp-subtext1" id={unqiueId}>
@@ -53,7 +71,21 @@
                 <Copy size={24} class="my-auto" />
                 <span class="ml-1 text-lg">Copy link</span>
             </button>
+
             <hr class="my-1 border-ctp-surface1" />
+
+            {#if state.user && (state.user._id === authorId || state.user.staff)}
+                <button
+                    class={`unique  ${deleted ? "text-ctp-green" : "text-ctp-red"}`}
+                    on:click={() => _delete(link.split("/").pop())}
+                >
+                    <Trash size={24} class="my-auto" />
+                    <span class="ml-1 text-lg">Delete</span>
+                </button>
+            {/if}
+
+            <hr class="my-1 border-ctp-surface1" />
+
             <button
                 class={`unique ${reported ? "text-ctp-green" : "text-ctp-red"}`}
                 on:click={report}
