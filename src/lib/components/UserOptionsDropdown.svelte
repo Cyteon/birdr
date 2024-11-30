@@ -82,6 +82,9 @@
                         <Trash size={24} class="my-auto" />
                         <span class="ml-1 text-lg">Purge</span>
                     </button>
+
+                    <hr class="my-1 border-ctp-surface1" />
+
                     {#if user.banned}
                         <button
                             class="unique text-ctp-green"
