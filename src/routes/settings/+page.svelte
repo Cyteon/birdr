@@ -24,8 +24,8 @@
         userInfoError = "";
         userInfoSuccess = "";
 
-        if (username.includes(" ")) {
-            userInfoError = "Username cannot contain spaces!";
+        if (/[^a-zA-Z0-9]/.test(username)) {
+            userInfoError = "Username can only contain letters and numbers";
             return;
         }
 
