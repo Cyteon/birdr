@@ -4,6 +4,7 @@ export interface PostType {
   content: string;
   authorId: mongoose.Types.ObjectId;
   postedAt: Date;
+  mentions: Map<string, mongoose.Types.ObjectId>;
 }
 
 export const postSchema = new mongoose.Schema<PostType>({
@@ -14,6 +15,14 @@ export const postSchema = new mongoose.Schema<PostType>({
     ref: "User",
   },
   postedAt: { type: Date, default: Date.now },
+  mentions: {
+    type: Map,
+    of: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+    default: {},
+  },
 });
 
 export default mongoose.models.Post || mongoose.model("Post", postSchema);

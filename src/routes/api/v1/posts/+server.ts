@@ -1,5 +1,6 @@
 import { verifyRequest } from "$lib/server/verifyRequest.server";
 import Post from "$lib/models/Post";
+import User from "$lib/models/User";
 
 export async function PUT({ request }) {
   const user = await verifyRequest(request);
@@ -10,7 +11,25 @@ export async function PUT({ request }) {
 
   const { content } = await request.json();
 
-  let post = await Post.create({ content, authorId: user.id });
+  let usersMentioned = content.match(/@(\w+)/g);
+
+  console.log(usersMentioned);
+
+  let usersData = await User.find({
+    username: { $in: usersMentioned.map((u) => u.slice(1)) },
+  });
+
+  console.log(usersData);
+
+  // map of user:id
+  let mentions = usersData.reduce((acc, user) => {
+    acc[`@${user.username}`] = user.id;
+    return acc;
+  }, {});
+
+  console.log(mentions);
+
+  let post = await Post.create({ content, authorId: user.id, mentions });
 
   return Response.json(post);
 }

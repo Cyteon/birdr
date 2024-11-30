@@ -1,7 +1,9 @@
 import { marked } from "marked";
 import DOMPurify from "dompurify";
 
-export function parsePost(text: string, clip = true, url = "") {
+export function parsePost(post, clip = true, url = "") {
+  let text = post.content;
+
   if (text.split("\n").length > 5 && clip) {
     text = text.split("\n").slice(0, 5).join("\n");
     text += ` ... <a href="${url}">Read more</a>`;
@@ -9,6 +11,21 @@ export function parsePost(text: string, clip = true, url = "") {
 
   if (text.length > 500 && clip) {
     text = text.slice(0, 500) + ` ... <a href="${url}">Read more</a>`;
+  }
+
+  let mentions = text.match(/@(\w+)/g);
+
+  if (mentions) {
+    for (let mention of mentions) {
+      let mentionData = post.mentions[mention];
+
+      if (mentionData) {
+        text = text.replace(
+          mention,
+          `<a href="/${mention}" class="no-underline">${mention}</a>`,
+        );
+      }
+    }
   }
 
   let parsed = DOMPurify.sanitize(marked(text) as string);
