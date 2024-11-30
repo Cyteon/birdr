@@ -41,8 +41,8 @@
         }
 
         if (avatar) {
-            if (avatar.size > 1024 * 1024) {
-                userInfoError = "Avatar must be less than 1MB!";
+            if (avatar.size > 2048 * 2048) {
+                userInfoError = "Avatar must be less than 2MB!";
                 return;
             }
 

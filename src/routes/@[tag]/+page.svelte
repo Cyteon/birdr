@@ -84,7 +84,7 @@
                     <img
                         src={user.avatarUrl}
                         alt={user.username}
-                        class="w-16 h-16 rounded-full"
+                        class="w-16 h-16 rounded-full object-cover"
                     />
                     <div class="ml-2">
                         <h1 class="text-3xl font-bold leading-none flex">
@@ -144,7 +144,7 @@
                     <img
                         src={user.avatarUrl}
                         alt={user.username}
-                        class="w-14 h-14 rounded-full"
+                        class="w-14 h-14 rounded-full object-cover"
                     />
                     <div class="ml-2 w-full">
                         <div class="flex w-full">

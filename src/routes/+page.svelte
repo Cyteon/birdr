@@ -126,7 +126,7 @@
                 <img
                     src={post.authorId.avatarUrl}
                     alt={post.authorId.username}
-                    class="w-14 h-14 rounded-full"
+                    class="w-14 h-14 rounded-full object-cover"
                 />
                 <div class="ml-2 w-full">
                     <p class="flex">
