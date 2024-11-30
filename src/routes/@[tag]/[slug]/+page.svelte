@@ -37,10 +37,7 @@
 </script>
 
 <svelte:head>
-    <meta
-        name="og:description"
-        content={post ? post.content : "Post not found"}
-    />
+    <meta name="og:title" content="An Post by @{post.authorId.username}" />
 
     {#if browser}
         <meta name="og:link" content={window.location.href} />
