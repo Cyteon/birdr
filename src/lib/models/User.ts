@@ -6,6 +6,7 @@ export interface UserType {
   username: String;
   displayName: String;
   staff: Boolean;
+  banned: Boolean;
   avatarUrl: String;
 }
 
@@ -15,6 +16,7 @@ export const userSchema = new mongoose.Schema<UserType>({
   username: { type: String, required: true },
   displayName: { type: String, required: false },
   staff: { type: Boolean, default: false },
+  banned: { type: Boolean, default: false },
   avatarUrl: {
     type: String,
     default: "https://i.imgur.com/Pu8s9rV.png",

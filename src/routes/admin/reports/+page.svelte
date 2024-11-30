@@ -40,11 +40,64 @@
         }
     });
 
-    async function ignore(id) {}
+    async function ignore(id) {
+        const res = await fetch(`/api/v1/reports`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${getCookie("token")}`,
+            },
+            body: JSON.stringify({ id }),
+        });
 
-    async function ban(id) {}
+        if (res.ok) {
+            reports = reports.filter((report) => report._id !== id);
+        }
+    }
 
-    async function _delete(id) {}
+    async function ban(username) {
+        const res = await fetch(`/api/v1/users/${username}/ban`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${getCookie("token")}`,
+            },
+        });
+
+        if (res.ok) {
+            const userIndex = reports.findIndex(
+                (report) => report.postAuthorId.username === username,
+            );
+            if (userIndex !== -1) {
+                reports[userIndex].postAuthorId.banned = true;
+            }
+        }
+    }
+
+    async function _delete(postId, reportId) {
+        let res = await fetch(`/api/v1/posts/${postId}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${getCookie("token")}`,
+            },
+        });
+
+        if (res.ok) {
+            res = await fetch(`/api/v1/reports`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${getCookie("token")}`,
+                },
+                body: JSON.stringify({ id: reportId }),
+            });
+
+            if (res.ok) {
+                reports = reports.filter((report) => report._id !== reportId);
+            }
+        }
+    }
 </script>
 
 <div class="flex min-h-screen w-full">
@@ -104,15 +157,16 @@
                 <div class="flex flex-wrap mt-2 space-x-2">
                     <button
                         class="unique bg-ctp-red"
-                        on:click={() => _delete(report._id)}
+                        on:click={() => _delete(report.postId, report._id)}
                     >
                         <Trash class="my-auto" />
                         <span class="ml-1 text-lg">Delete</span>
                     </button>
 
                     <button
-                        class="unique bg-ctp-red"
-                        on:click={() => ban(report._id)}
+                        class={`unique ${report.postAuthorId.banned ? "bg-ctp-surface1" : "bg-ctp-red"}`}
+                        disabled={report.postAuthorId.banned}
+                        on:click={() => ban(report.postAuthorId.username)}
                     >
                         <Ban class="my-auto" />
                         <span class="ml-1 text-lg">Ban</span>

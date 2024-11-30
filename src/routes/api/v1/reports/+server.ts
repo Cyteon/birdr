@@ -22,6 +22,26 @@ export async function GET({ request }) {
   return Response.json(reports);
 }
 
+export async function DELETE({ request }) {
+  // ⚠️ Restricted Endpoint ⚠️
+
+  const user = await verifyRequest(request);
+
+  if (!user) {
+    return Response.json({ message: "Unauthorized" }, { status: 401 });
+  }
+
+  if (!user.staff) {
+    return Response.json({ message: "Forbidden" }, { status: 403 });
+  }
+
+  const { id } = await request.json();
+
+  await Report.findByIdAndDelete(id);
+
+  return Response.json({ message: "Success" });
+}
+
 export async function POST({ request }) {
   const { content, postId, authorId } = await request.json();
 

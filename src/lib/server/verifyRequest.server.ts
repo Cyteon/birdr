@@ -24,5 +24,9 @@ export async function verifyRequest(request) {
     return null;
   }
 
+  if (user.banned) {
+    return null;
+  }
+
   return user;
 }
