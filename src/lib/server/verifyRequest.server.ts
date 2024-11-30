@@ -28,7 +28,5 @@ export async function verifyRequest(request) {
     return null;
   }
 
-  user.password = undefined;
-
   return user;
 }

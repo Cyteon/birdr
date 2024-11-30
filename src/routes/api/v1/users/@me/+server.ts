@@ -21,11 +21,13 @@ export async function PATCH({ request }) {
     return Response.json({ message: "Unauthorized" }, { status: 401 });
   }
 
-  let { displayName, username } = await request.json();
+  let { displayName, username, avatar } = await request.json();
 
   if (displayName) {
     user.displayName = displayName;
   }
+
+  console.log(avatar);
 
   if (username) {
     let existingUser = await User.findOne({ username });
@@ -65,6 +67,8 @@ export async function PATCH({ request }) {
   }
 
   await user.save();
+
+  user.password = undefined;
 
   return Response.json(user);
 }

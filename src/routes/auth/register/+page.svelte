@@ -18,6 +18,12 @@
             return;
         }
 
+        if (username.length > 20) {
+            error = "Username must be less than 20 characters long";
+            loading = false;
+            return;
+        }
+
         if (/[^a-zA-Z0-9]/.test(username)) {
             error = "Username can only contain letters and numbers";
             loading = false;
@@ -82,6 +88,11 @@
                 id="email"
                 placeholder="example@example.com"
                 class="w-full text-lg p-2 my-2 border-2 border-ctp-base bg-ctp-crust rounded-lg"
+                onkeypress={(e) => {
+                    if (e.key === " ") {
+                        e.preventDefault();
+                    }
+                }}
                 bind:value={email}
             />
 

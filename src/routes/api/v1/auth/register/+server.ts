@@ -6,6 +6,17 @@ import { typeid } from "typeid-ts";
 export async function POST({ request }) {
   const { email, password, username, displayName } = await request.json();
 
+  if (username.includes(" ")) {
+    return Response.json(
+      { message: "Username cannot contain spaces" },
+      { status: 400 },
+    );
+  }
+
+  if (username.length > 20) {
+    return Response.json({ message: "Username too long" }, { status: 400 });
+  }
+
   const existing = await User.find({
     $or: [{ email }, { username }],
   });

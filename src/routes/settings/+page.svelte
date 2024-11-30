@@ -34,6 +34,9 @@
             body.username = username;
         }
 
+
+        console.log(body)
+
         const res = await fetch("/api/v1/users/@me", {
             method: "PATCH",
             headers: {
@@ -72,15 +75,22 @@
                 <input
                     type="text"
                     placeholder={state.user?.username as string}
+                    on:keypress={(e) => {
+                        if (e.key === " ") {
+                            e.preventDefault();
+                        }
+                    }}
                     bind:value={username}
-                    />
+                />
+
+
 
                 {#if userInfoError}
-                    <p class="text-ctp-red mt-2 text-lg">
+                    <p class="text-ctp-red mt-1 text-lg">
                         {userInfoError}
                     </p>
                 {:else if userInfoSuccess}
-                    <p class="text-ctp-green mt-2 text-lg">
+                    <p class="text-ctp-green mt-1 text-lg">
                         {userInfoSuccess}
                     </p>
                 {/if}
@@ -110,7 +120,7 @@
 </div>
 
 <style>
-    input, select:not(.unique2) {
+    input:not(.unique2), select:not(.unique2) {
         outline: none;
         @apply w-64 text-lg p-2 mt-2 border border-ctp-surface0 bg-ctp-mantle rounded-md;
     }
