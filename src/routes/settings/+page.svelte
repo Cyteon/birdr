@@ -1,7 +1,7 @@
 <script lang="ts">
     import { state } from "$lib/state.svelte";
     import SideBar from "$lib/components/SideBar.svelte";
-    import { Bug } from "lucide-svelte";
+    import { getCookie } from "typescript-cookie";
     import { browser } from "$app/environment";
 
     let displayName = "";
@@ -15,6 +15,27 @@
         localStorage.setItem("theme", theme);
         document.documentElement.className = `ctp-${theme}`;
     }
+
+    async function updateUserInfo() {
+        let body = {};
+
+        if (displayName !== "") {
+            body.displayName = displayName;
+        }
+
+        const res = await fetch("/api/v1/users/@me", {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${getCookie("token")}`,
+            },
+            body: JSON.stringify(body),
+        });
+
+        if (res.ok) {
+            state.user = await res.json()
+        }
+    }
 </script>
 
 <div class="flex min-h-screen w-full">
@@ -24,14 +45,20 @@
         <h1 class="text-3xl font-bold">Settings</h1>
 
         <div class="mt-5 flex flex-wrap">
-            <div class="mr-2 mb-2">
+            <div class="mr-2 mb-2 flex flex-col">
                 <h1 class="text-2xl font-semibold">Display Name</h1>
                 <input
                     type="text"
-                    class="placeholder:text-ctp-text"
                     placeholder={state.user?.displayName as string}
                     bind:value={displayName}
                 />
+
+                <button
+                    class="text-xl py-2 mt-3"
+                    on:click={() => updateUserInfo()}
+                >
+                    Update
+                </button>
             </div>
             <div>
                 <h1 class="text-2xl font-semibold">Theme</h1>
