@@ -82,9 +82,9 @@
                     <Trash size={24} class="my-auto" />
                     <span class="ml-1 text-lg">Delete</span>
                 </button>
-            {/if}
 
-            <hr class="my-1 border-ctp-surface1" />
+                <hr class="my-1 border-ctp-surface1" />
+            {/if}
 
             <button
                 class={`unique ${reported ? "text-ctp-green" : "text-ctp-red"}`}
