@@ -62,6 +62,7 @@
                 >Home</span
             >
         </a>
+
         <!--- Not ready
         <a href="/recent" class={location === "/recent" ? "text-ctp-blue" : ""}>
             <Globe2 size={32} class="my-auto" />

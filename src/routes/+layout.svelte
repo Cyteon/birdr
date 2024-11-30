@@ -3,8 +3,17 @@
 	import { state } from '$lib/state.svelte';
 	import { onMount } from 'svelte';
 	import { getCookie } from 'typescript-cookie';
+	import { browser } from '$app/environment';
 
 	let { children } = $props();
+
+	if (browser) {
+   	    let theme = localStorage.getItem('theme') || 'ctp-macchiato';
+
+       	onMount(() => {
+            document.documentElement.className = `ctp-${theme}`;
+        });
+	}
 
 	onMount(async () => {
 	    let token = getCookie('token');
