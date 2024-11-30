@@ -88,7 +88,7 @@
                     focus:outline-none focus:border-ctp-surface2 transition-color duration-500
                     ${postContent.length > 0 ? "h-32" : "h-11"}
                 `}
-                    placeholder="What's on your mind today?"
+                    placeholder={`What's on your mind today @${state.user.username}?`}
                     bind:value={postContent}
                 ></textarea>
                 <p class="mb-2 text-ctp-red text-right">
