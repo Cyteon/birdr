@@ -7,6 +7,7 @@
     import { getCookie } from "typescript-cookie";
     import { createTimeString, parsePost } from "$lib/utils";
     import MessageOptionsDropdown from "$lib/components/MessageOptionsDropdown.svelte";
+    import UserOptionsDropdown from "$lib/components/UserOptionsDropdown.svelte";
 
     let { data } = $props();
 
@@ -78,7 +79,7 @@
             class={`my-5 py-3 border border-ctp-surface0 rounded-md ${phone ? "w-full mx-2" : "w-3/5 mx-auto"}`}
         >
             <div class="border-b-4 border-b-ctp-surface0 pb-3 px-3">
-                <div class="flex">
+                <div class="flex w-full">
                     <img
                         src={user.avatarUrl}
                         alt={user.username}
@@ -91,6 +92,10 @@
                         <p class="text-xl text-ctp-subtext0">
                             @{user.username}
                         </p>
+                    </div>
+
+                    <div class="ml-auto">
+                        <UserOptionsDropdown {user} />
                     </div>
                 </div>
 
