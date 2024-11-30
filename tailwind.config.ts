@@ -56,7 +56,7 @@ export default {
       }),
     },
   },
-  safelist: ["mocha", "macchiato", "frappe", "ctp-latte"],
+  safelist: ["ctp-mocha", "ctp-macchiato", "ctp-frappe", "ctp-latte"],
   plugins: [
     typography,
     catppuccin({
