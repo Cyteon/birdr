@@ -15,10 +15,12 @@ export async function PUT({ request }) {
   return Response.json(post);
 }
 
-export async function GET({}) {
+export async function GET({ url }) {
+  let timeSort = url.searchParams.get("sort") === "asc" ? 1 : -1;
+
   const posts = await Post.find()
     .populate("authorId", "username displayName avatarUrl staff")
-    .sort({ postedAt: -1 })
+    .sort({ postedAt: timeSort })
     .limit(20)
     .exec();
 
