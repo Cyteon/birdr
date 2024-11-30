@@ -24,6 +24,12 @@
         userInfoError = "";
         userInfoSuccess = "";
 
+        if (username.includes(" ")) {
+            userInfoError = "Username cannot contain spaces!";
+            return;
+        }
+
+        const avatar = (document.getElementById("avatar") as HTMLInputElement).files?.[0];
         let body = {};
 
         if (displayName !== "") {
@@ -34,8 +40,19 @@
             body.username = username;
         }
 
+        if (avatar) {
+            const base64 = await new Promise<string>((resolve) => {
+                const reader = new FileReader();
 
-        console.log(body)
+                reader.onload = () => {
+                    resolve(reader.result as string);
+                };
+
+                reader.readAsDataURL(avatar);
+            });
+
+            body.avatar = base64;
+        }
 
         const res = await fetch("/api/v1/users/@me", {
             method: "PATCH",
@@ -83,7 +100,18 @@
                     bind:value={username}
                 />
 
+                <!-- avatar upload -->
 
+                <h1 class="text-xl font-semibold mt-3">Avatar</h1>
+                <input
+                    type="file"
+                    accept="image/*"
+                    id="avatar"
+                    class="
+                        unique2 bg-ctp-mantle mt-2 text-lg file:bg-ctp-crust file:p-2 file:border-none
+                        file:text-ctp-text file:rounded-l-lg rounded-lg
+                    "
+                    />
 
                 {#if userInfoError}
                     <p class="text-ctp-red mt-1 text-lg">

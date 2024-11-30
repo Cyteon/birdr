@@ -1,6 +1,9 @@
 import User from "$lib/models/User";
 import UsernameRedirect from "$lib/models/UsernameRedirect";
 import { verifyRequest } from "$lib/server/verifyRequest.server";
+import s3 from "$lib/server/s3.server";
+import { PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
+import { S3_ENDPOINT } from "$env/static/private";
 
 export async function GET({ request }) {
   let user = await verifyRequest(request);
@@ -9,7 +12,7 @@ export async function GET({ request }) {
     return Response.json({ message: "Unauthorized" }, { status: 401 });
   }
 
-  delete user.password;
+  user.password = undefined;
 
   return Response.json(user);
 }
@@ -26,8 +29,6 @@ export async function PATCH({ request }) {
   if (displayName) {
     user.displayName = displayName;
   }
-
-  console.log(avatar);
 
   if (username) {
     let existingUser = await User.findOne({ username });
@@ -64,6 +65,35 @@ export async function PATCH({ request }) {
     await redirect.save();
 
     user.username = username;
+  }
+
+  if (avatar) {
+    var buf = Buffer.from(
+      avatar.replace(/^data:image\/\w+;base64,/, ""),
+      "base64",
+    );
+
+    let key = `avatars/${user._id}.png`;
+
+    try {
+      await s3.send(
+        new DeleteObjectCommand({
+          Bucket: "data",
+          Key: key,
+        }),
+      );
+    } catch {}
+
+    await s3.send(
+      new PutObjectCommand({
+        Bucket: "data",
+        Key: key,
+        Body: buf,
+        ContentType: "image/png",
+      }),
+    );
+
+    user.avatarUrl = `${S3_ENDPOINT}/object/public/data/${key}`;
   }
 
   await user.save();
