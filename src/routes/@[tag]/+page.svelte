@@ -87,6 +87,14 @@
                     </div>
                 </div>
 
+                {#if user.banned}
+                    <div class="bg-ctp-mantle p-3 mt-4 rounded-md">
+                        <h1 class="text-ctp-red font-bold text-xl">
+                            This user has been banned
+                        </h1>
+                    </div>
+                {/if}
+
                 {#if _state.user && _state.user._id == user._id}
                     <textarea
                         class={`
