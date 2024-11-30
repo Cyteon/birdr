@@ -17,10 +17,12 @@ export async function PUT({ request }) {
 
 export async function GET({ url }) {
   let timeSort = url.searchParams.get("sort") === "asc" ? 1 : -1;
+  let offset = parseInt(url.searchParams.get("offset")) || 0;
 
   const posts = await Post.find()
     .populate("authorId", "username displayName avatarUrl staff")
     .sort({ postedAt: timeSort })
+    .skip(offset)
     .limit(20)
     .exec();
 

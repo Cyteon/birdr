@@ -12,6 +12,7 @@
     let postContent = "";
     let postingError = "";
 
+    let sorting = "desc";
     let phone = false;
 
     if (browser) {
@@ -33,6 +34,18 @@
 
         posts = await res.json();
     });
+
+    async function newSort(sort) {
+        sorting = sort;
+
+        const res = await fetch(`/api/v1/posts?sort=${sort}`, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        posts = await res.json();
+    }
 
     async function post() {
         postingError = "";
@@ -82,6 +95,14 @@
                     {postingError}
                 </p>
                 <div class="flex w-full justify-end">
+                    <select
+                        class="p-2 rounded-lg bg-ctp-crust outline-none text-lg mr-auto"
+                        onchange={() => newSort(event.target.value)}
+                    >
+                        <option value="desc">Newest</option>
+                        <option value="asc">Oldest</option>
+                    </select>
+
                     <button
                         class={`px-5 flex transition-colors duration-300 ${
                             postContent.length === 0
@@ -92,9 +113,11 @@
                         onclick={post}
                     >
                         <Send size={24} class="my-auto" />
-                        <span class="ml-2 text-lg mb-0.5">Post</span>
+                        <span class="ml-2 text-lg mt-0.5">Post</span>
                     </button>
                 </div>
+
+                <div class="px- pt-1 flex w-full"></div>
             </div>
         {/if}
 
