@@ -133,10 +133,10 @@
 
                     <div class="ml-auto flex">
                         <div class="my-auto">
-                            <h1 class="text-2xl font-bold">
+                            <h1 class="text-2xl font-bold text-right">
                                 {report.reporterId.displayName}
                             </h1>
-                            <p class="text-ctp-subtext1 text-lg">
+                            <p class="text-ctp-subtext1 text-lg text-right">
                                 @{report.reporterId.username}
                             </p>
                         </div>
