@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 export interface AuthToken {
   token: string;
-  userId: string;
+  userId: mongoose.Types.ObjectId;
 }
 
 const authTokenSchema = new mongoose.Schema<AuthToken>({
