@@ -36,14 +36,6 @@
     }
 </script>
 
-<svelte:head>
-    <meta name="og:title" content="An Post by @{post.authorId.username}" />
-
-    {#if browser}
-        <meta name="og:link" content={window.location.href} />
-    {/if}
-</svelte:head>
-
 <div class="flex min-h-screen w-full">
     <SideBar />
     <div class="w-full flex">
