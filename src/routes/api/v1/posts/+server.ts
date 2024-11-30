@@ -17,7 +17,7 @@ export async function PUT({ request }) {
 
 export async function GET({}) {
   const posts = await Post.find()
-    .populate("authorId", "username displayName avatarUrl")
+    .populate("authorId", "username displayName avatarUrl staff")
     .sort({ postedAt: -1 })
     .limit(20)
     .exec();

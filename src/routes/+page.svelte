@@ -7,6 +7,7 @@
     import { state as state } from "$lib/state.svelte";
     import { createTimeString, parsePost } from "$lib/utils";
     import MessageOptionsDropdown from "$lib/components/MessageOptionsDropdown.svelte";
+    import Badges from "$lib/components/Badges.svelte";
 
     let postContent = "";
     let postingError = "";
@@ -112,6 +113,7 @@
                         >
                             {post.authorId.displayName}
                         </a>
+                        <Badges user={post.authorId} small={true} />
                         <span
                             class="text-ctp-subtext0 ml-1 mt-[5px] leading-none my-auto"
                         >

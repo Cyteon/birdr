@@ -8,6 +8,7 @@
     import { createTimeString, parsePost } from "$lib/utils";
     import MessageOptionsDropdown from "$lib/components/MessageOptionsDropdown.svelte";
     import UserOptionsDropdown from "$lib/components/UserOptionsDropdown.svelte";
+    import Badges from "$lib/components/Badges.svelte";
 
     let { data } = $props();
 
@@ -86,8 +87,9 @@
                         class="w-16 h-16 rounded-full"
                     />
                     <div class="ml-2">
-                        <h1 class="text-3xl font-bold leading-none name">
+                        <h1 class="text-3xl font-bold leading-none flex">
                             {user.displayName}
+                            <Badges {user} />
                         </h1>
                         <p class="text-xl text-ctp-subtext0">
                             @{user.username}
@@ -146,8 +148,9 @@
                     />
                     <div class="ml-2 w-full">
                         <div class="flex w-full">
-                            <h1 class="text-2xl font-bold leading-none">
+                            <h1 class="text-2xl font-bold leading-none flex">
                                 {user.displayName}
+                                <Badges {user} small={true} />
                             </h1>
                             <span
                                 class="text-ctp-subtext0 ml-1 mt-[5px] leading-none my-auto"
