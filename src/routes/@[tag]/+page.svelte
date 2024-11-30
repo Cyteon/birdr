@@ -14,6 +14,7 @@
     let user = $state(null);
     let phone = $state(false);
     let postContent = $state("");
+    let postingError = $state("");
 
     if (browser) {
         window.addEventListener("resize", () => {
@@ -44,6 +45,8 @@
     });
 
     async function post() {
+        postingError = "";
+
         const res = await fetch("/api/v1/posts", {
             method: "PUT",
             headers: {
@@ -60,6 +63,10 @@
             postContent = "";
 
             console.log(user);
+        } else {
+            let data = await res.json();
+
+            postingError = data.message;
         }
     }
 </script>
@@ -105,6 +112,9 @@
                         placeholder="What's on your mind today?"
                         bind:value={postContent}
                     ></textarea>
+                    <p class="mb-2 text-ctp-red text-right">
+                        {postingError}
+                    </p>
                     <div class="flex w-full justify-end">
                         <button
                             class={`px-5 flex transition-colors duration-300 ${
