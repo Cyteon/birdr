@@ -8,7 +8,7 @@
 	let { children } = $props();
 
 	if (browser) {
-   	    let theme = localStorage.getItem('theme') || 'ctp-macchiato';
+   	    let theme = localStorage.getItem('theme') || 'macchiato';
 
        	onMount(() => {
             document.documentElement.className = `ctp-${theme}`;

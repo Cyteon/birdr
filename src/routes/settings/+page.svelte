@@ -101,7 +101,7 @@
                         <option value="frappe">Frappe</option>
                         <option value="macchiato">Macchiato</option>
                         <option value="mocha">Mocha</option>
-                        <option value="black-white">Black & White</option>
+                        <option value="">Black & White</option>
                     </select>
                 </div>
             </div>
