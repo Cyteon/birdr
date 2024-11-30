@@ -2,7 +2,7 @@ import { marked } from "marked";
 import DOMPurify from "dompurify";
 
 export function parsePost(text: string, clip = true, url = "") {
-  if (text.split("\n").length > 5) {
+  if (text.split("\n").length > 5 && clip) {
     text = text.split("\n").slice(0, 5).join("\n");
     text += ` ... <a href="${url}">Read more</a>`;
   }

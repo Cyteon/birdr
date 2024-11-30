@@ -78,11 +78,7 @@
                             </span>
                         </div>
                         <p class="text-lg prose">
-                            {@html parsePost(
-                                post.content,
-                                true,
-                                `/@${post.authorId.username}/${post._id}`,
-                            )}
+                            {@html parsePost(post.content, false)}
                         </p>
                     </div>
                 </div>
