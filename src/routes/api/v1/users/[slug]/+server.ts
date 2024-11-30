@@ -1,5 +1,6 @@
 import User from "$lib/models/User";
 import Post from "$lib/models/Post";
+import UsernameRedirect from "$lib/models/UsernameRedirect";
 
 export async function GET({ params }) {
   let username = params.slug;
@@ -7,6 +8,12 @@ export async function GET({ params }) {
   let user = await User.findOne({ username });
 
   if (!user) {
+    let redir = await UsernameRedirect.findOne({ from: username });
+
+    if (redir) {
+      return Response.json({ location: `/@${redir.to}` }, { status: 307 });
+    }
+
     return Response.json({ message: "User not found" }, { status: 404 });
   }
 

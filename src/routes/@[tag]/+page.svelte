@@ -34,6 +34,10 @@
             user = await res.json();
 
             console.log(user);
+        } else if (res.status == 307) {
+            let json = await res.json();
+
+            window.location.href = json.location;
         } else {
             notFound = true;
         }

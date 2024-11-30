@@ -13,7 +13,12 @@ export interface UserType {
 export const userSchema = new mongoose.Schema<UserType>({
   email: { type: String, required: true },
   password: { type: String, required: true },
-  username: { type: String, required: true },
+  username: {
+    type: String,
+    required: true,
+    lowercase: true,
+    trim: true,
+  },
   displayName: { type: String, required: false },
   staff: { type: Boolean, default: false },
   banned: { type: Boolean, default: false },
