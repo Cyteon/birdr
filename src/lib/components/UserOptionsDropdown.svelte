@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Ellipsis, Flag, Copy, Ban, ShieldCheck } from "lucide-svelte";
+    import { Ellipsis, Trash, Ban, ShieldCheck } from "lucide-svelte";
     import { state } from "$lib/state.svelte";
     import { getCookie } from "typescript-cookie";
     import { browser } from "$app/environment";
@@ -47,6 +47,20 @@
             user.banned = false;
         }
     }
+
+    async function purge(username) {
+        const res = await fetch(`/api/v1/users/${username}/purge`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${getCookie("token")}`,
+            },
+        });
+
+        if (res.ok) {
+            window.location.reload();
+        }
+    }
 </script>
 
 {#if state.user?.staff}
@@ -61,6 +75,13 @@
         {#if open}
             <div class="absolute mt-1 bg-ctp-mantle rounded-md p-2">
                 {#if state.user && state.user.staff}
+                    <button
+                        class="unique text-ctp-red"
+                        on:click={() => purge(user.username)}
+                    >
+                        <Trash size={24} class="my-auto" />
+                        <span class="ml-1 text-lg">Purge</span>
+                    </button>
                     {#if user.banned}
                         <button
                             class="unique text-ctp-green"
