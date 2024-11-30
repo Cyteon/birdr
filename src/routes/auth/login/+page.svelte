@@ -63,6 +63,11 @@
                 id="identifier"
                 placeholder="Username or Email"
                 class="w-full text-lg p-2 my-2 border-2 border-ctp-base bg-ctp-crust rounded-lg"
+                onkeypress={(e) => {
+                    if (e.key === " ") {
+                        e.preventDefault();
+                    }
+                }}
                 bind:value={identifier}
             />
 

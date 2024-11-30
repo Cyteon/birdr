@@ -3,6 +3,8 @@ import Post from "$lib/models/Post";
 import { verifyRequest } from "$lib/server/verifyRequest.server";
 
 export async function POST({ request, params }) {
+  // ⚠️ Restricted Endpoint ⚠️
+
   let user = await verifyRequest(request);
 
   if (!user) {
