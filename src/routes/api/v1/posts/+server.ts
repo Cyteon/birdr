@@ -12,22 +12,18 @@ export async function PUT({ request }) {
   const { content } = await request.json();
 
   let usersMentioned = content.match(/@(\w+)/g);
+  let mentions = {};
 
-  console.log(usersMentioned);
+  if (usersMentioned) {
+    let usersData = await User.find({
+      username: { $in: usersMentioned.map((u) => u.slice(1)) },
+    });
 
-  let usersData = await User.find({
-    username: { $in: usersMentioned.map((u) => u.slice(1)) },
-  });
-
-  console.log(usersData);
-
-  // map of user:id
-  let mentions = usersData.reduce((acc, user) => {
-    acc[`@${user.username}`] = user.id;
-    return acc;
-  }, {});
-
-  console.log(mentions);
+    mentions = usersData.reduce((acc, user) => {
+      acc[`@${user.username}`] = user.id;
+      return acc;
+    }, {});
+  }
 
   let post = await Post.create({ content, authorId: user.id, mentions });
 
