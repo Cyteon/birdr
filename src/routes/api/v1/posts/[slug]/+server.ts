@@ -26,3 +26,18 @@ export async function DELETE({ request, params }) {
 
   return Response.json({ message: "Success" });
 }
+
+export async function GET({ params }) {
+  let postId = params.slug;
+
+  let post = await Post.findById(postId).populate(
+    "authorId",
+    "username displayName avatarUrl",
+  );
+
+  if (!post) {
+    return Response.json({ message: "Post not found" }, { status: 404 });
+  }
+
+  return Response.json(post);
+}

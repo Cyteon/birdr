@@ -26,6 +26,7 @@ export async function GET({ params }) {
     username: user.username,
     displayName: user.displayName,
     avatarUrl: user.avatarUrl,
+    banned: user.banned,
     posts,
   });
 }

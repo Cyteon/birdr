@@ -2,6 +2,7 @@
     import { Ellipsis, Flag, Copy, Trash } from "lucide-svelte";
     import { state } from "$lib/state.svelte";
     import { getCookie } from "typescript-cookie";
+    import { browser } from "$app/environment";
 
     export let link = "";
     export let content = "";
@@ -12,11 +13,13 @@
     let open = false;
     let unqiueId = Math.random().toString(36).substring(7);
 
-    document.addEventListener("click", (e) => {
-        if (!e.target.closest(`#${unqiueId}`)) {
-            open = false;
-        }
-    });
+    if (browser) {
+        document.addEventListener("click", (e) => {
+            if (!e.target.closest(`#${unqiueId}`)) {
+                open = false;
+            }
+        });
+    }
 
     async function report() {
         const res = await fetch("/api/v1/reports", {
