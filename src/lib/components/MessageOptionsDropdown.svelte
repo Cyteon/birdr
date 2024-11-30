@@ -6,7 +6,6 @@
     export let link = "";
     export let content = "";
     export let authorId = "";
-    export let parent = "";
 
     let reported = false;
     let deleted = false;

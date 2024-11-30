@@ -69,17 +69,19 @@
                 >Recent</span
             >
         </a>
-        <a
-            href="/settings"
-            class={location === "/settings" ? "text-ctp-blue" : ""}
-        >
-            <Cog size={32} class="my-auto" />
-            <span class="ml-2 text-lg font-semibold" hidden={!expanded}
-                >Settings</span
-            >
-        </a>
         --->
+
         {#if state.user}
+            <a
+                href="/settings"
+                class={location === "/settings" ? "text-ctp-blue" : ""}
+            >
+                <Cog size={32} class="my-auto" />
+                <span class="ml-2 text-lg font-semibold" hidden={!expanded}
+                    >Settings</span
+                >
+            </a>
+
             <a
                 href={`/@${state.user.username}`}
                 class={location === `/@${state.user.username}`

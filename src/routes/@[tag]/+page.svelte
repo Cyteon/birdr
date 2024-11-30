@@ -6,6 +6,7 @@
     import { Send } from "lucide-svelte";
     import { getCookie } from "typescript-cookie";
     import { createTimeString, parsePost } from "$lib/utils";
+    import MessageOptionsDropdown from "$lib/components/MessageOptionsDropdown.svelte";
 
     let { data } = $props();
 
@@ -126,8 +127,20 @@
                             >
                                 @{user.username}
                             </span>
-                            <span class="ml-auto text-ctp-subtext1">
-                                {createTimeString(post.postedAt)}
+                            <span class="ml-auto flex">
+                                {#if !phone}
+                                    <span class="text-ctp-subtext1"
+                                        >{createTimeString(post.postedAt)}</span
+                                    >
+                                {/if}
+
+                                <MessageOptionsDropdown
+                                    link={`${
+                                        window.location.origin
+                                    }/@${user.username}/${post._id}`}
+                                    content={post.content}
+                                    authorId={user._id}
+                                />
                             </span>
                         </div>
                         <p class="text-lg prose">
