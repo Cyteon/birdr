@@ -76,8 +76,6 @@ export async function GET({ url }) {
     .limit(20)
     .exec();
 
-  // get comment count for each post
-
   const commentCounts = await Comment.aggregate([
     { $group: { _id: "$postId", count: { $sum: 1 } } },
   ]);

@@ -11,7 +11,7 @@
     let reported = false;
     let deleted = false;
     let open = false;
-    let unqiueId = Math.random().toString(36).substring(7);
+    let unqiueId = `dropdown-${Math.random().toString(36).substring(7)}`;
 
     if (browser) {
         document.addEventListener("click", (e) => {

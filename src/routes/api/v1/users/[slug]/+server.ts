@@ -1,5 +1,6 @@
 import User from "$lib/models/User";
 import Post from "$lib/models/Post";
+import Comment from "$lib/models/Comment";
 import UsernameRedirect from "$lib/models/UsernameRedirect";
 
 export async function GET({ params }) {
@@ -21,6 +22,11 @@ export async function GET({ params }) {
     .populate("mentions", "displayName")
     .limit(50)
     .sort({ postedAt: -1 });
+  
+  let commentCount = await Comment.aggregate([
+    { $match: { authorId: user._id } },
+    { $group: { _id: "$postId", count: { $sum: 1 } } },
+  ]);
 
   return Response.json({
     _id: user._id,
@@ -31,6 +37,10 @@ export async function GET({ params }) {
     otherBadges: user.otherBadges,
     staff: user.staff,
     verified: user.verified,
-    posts,
+    posts: posts.map((post) => {
+      let postObj = post.toJSON();
+      postObj.commentCount = commentCount.find((c) => c._id.toString() === post._id.toString())?.count || 0;
+      return postObj;
+    })
   });
 }
