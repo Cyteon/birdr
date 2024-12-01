@@ -179,12 +179,6 @@
                                             >{createTimeString(comment.postedAt)}</span
                                         >
                                     {/if}
-
-                                    <MessageOptionsDropdown
-                                        link={window.location.href}
-                                        content={comment.content}
-                                        authorId={comment.authorId._id}
-                                    />
                                 </span>
                             </div>
                             <p class="text-lg prose break-words">
