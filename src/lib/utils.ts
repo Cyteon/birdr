@@ -29,7 +29,7 @@ export function parsePost(post, clip = true, url = "") {
   }
 
   const links = post.content.match(/https?:\/\/[^\s]+/g);
-  const imageExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
+  const imageExtensions = ["jpg", "jpeg", "png", "gif", "webp", "svg"];
   const videoExtensions = ["mp4", "webm"];
 
   if (links) {
@@ -41,9 +41,7 @@ export function parsePost(post, clip = true, url = "") {
           link,
           `<img src="${link}" alt="Image" class="post-image" />`,
         );
-      }
-
-      if (videoExtensions.includes(extension)) {
+      } else if (videoExtensions.includes(extension)) {
         text = text.replace(
           link,
           `<video src="${link}" controls class="post-video" />`,
