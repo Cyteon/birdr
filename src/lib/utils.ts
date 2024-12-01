@@ -31,9 +31,16 @@ export function parsePost(post, clip = true, url = "") {
   const links = post.content.match(/https?:\/\/[^\s]+/g);
   const imageExtensions = ["jpg", "jpeg", "png", "gif", "webp", "svg"];
   const videoExtensions = ["mp4", "webm"];
+  let doneEmbeds = [];
+  let embedded = 0;
 
   if (links) {
     for (let link of links) {
+      if (embedded >= 2 && clip) {
+        text += ` ... <a href="${url}">Read more</a>`;
+        break;
+      }
+
       const extension = link.split(".").pop().toLowerCase().split("?")[0];
 
       if (imageExtensions.includes(extension)) {
@@ -47,9 +54,26 @@ export function parsePost(post, clip = true, url = "") {
           `<video src="${link}" controls class="post-video" />`,
         );
       }
+
+      if (post.ogData[link.replace(".", "_-_")] && !doneEmbeds.includes(link)) {
+        const ogData = post.ogData[link.replace(".", "_-_")];
+
+        let image = ogData.ogImage[0];
+
+        text += 
+          `<div class="bg-ctp-mantle p-2 mb-1 size-fit rounded-md max-w-xl border border-ctp-surface0">
+            <a class="text-xl font-bold m-0" href="${ogData.url}">${ogData.ogTitle}</a>
+            <p class="m-0 text-sm">${ogData.ogDescription}</p>
+            <img src="${image.url}" alt="${ogData.ogTitle}" class="post-image mb-0 mt-1" width="256" />
+          </div>
+        `;
+
+        doneEmbeds.push(link);
+      }
+
+      embedded++;
     }
   }
-  
 
   let parsed = DOMPurify.sanitize(marked(text) as string);
 
