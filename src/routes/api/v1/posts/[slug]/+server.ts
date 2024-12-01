@@ -30,10 +30,12 @@ export async function DELETE({ request, params }) {
 export async function GET({ params }) {
   let postId = params.slug;
 
-  let post = await Post.findById(postId).populate(
-    "authorId",
-    "username displayName avatarUrl staff",
-  );
+  let post = await Post.findById(postId)
+    .populate(
+      "authorId",
+      "username displayName avatarUrl staff",
+    )
+    .populate("mentions", "displayName");
 
   if (!post) {
     return Response.json({ message: "Post not found" }, { status: 404 });
