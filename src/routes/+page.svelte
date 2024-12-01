@@ -14,6 +14,7 @@
 
     let sorting = "desc";
     let phone = false;
+    let noMorePosts = false;
 
     if (browser) {
         window.addEventListener("resize", () => {
@@ -33,6 +34,34 @@
         });
 
         posts = await res.json();
+
+        const observer = new IntersectionObserver(
+            async (entries) => {
+                if (entries[0].isIntersecting) {
+                    const res = await fetch(
+                        `/api/v1/posts?sort=${sorting}&offset=${posts.length}`,
+                        {
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                        },
+                    );
+
+                    let newPosts = await res.json();
+
+                    if (newPosts.length === 0) {
+                        noMorePosts = true;
+                    }
+
+                    posts = [...posts, ...newPosts];
+                }
+            },
+            {
+                threshold: 0.5,
+            },
+        );
+
+        observer.observe(document.getElementById("bottom"));
     });
 
     async function newSort(sort) {
@@ -122,7 +151,7 @@
         {/if}
 
         {#each posts as post}
-            <div class="py-3 px-3 border-b border-b-ctp-surface0 flex">
+            <div class="py-3 px-3 border-b border-b-ctp-surface0 flex" id={post._id}>
                 <img
                     src={post.authorId.avatarUrl}
                     alt={post.authorId.username}
@@ -169,5 +198,13 @@
                 </div>
             </div>
         {/each}
+
+        {#if noMorePosts}
+            <div class="pb-2 pt-4 flex">
+                <p class="text-ctp-subtext1 mx-auto text-2xl">No more posts to show</p>
+            </div>
+        {/if}
+
+        <div id="bottom"></div>
     </div>
 </div>
