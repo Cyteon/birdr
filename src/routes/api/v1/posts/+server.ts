@@ -11,7 +11,7 @@ export async function PUT({ request }) {
 
   const { content } = await request.json();
 
-  let usersMentioned = content.match(/@(\w+)/g);
+  let usersMentioned = content.match(/(?<=^|\s)@(\w+)(?=\s|$)/g);
   let mentions = {};
 
   if (usersMentioned) {
