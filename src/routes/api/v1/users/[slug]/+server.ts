@@ -18,6 +18,7 @@ export async function GET({ params }) {
   }
 
   let posts = await Post.find({ authorId: user._id })
+    .populate("mentions", "displayName")
     .limit(50)
     .sort({ postedAt: -1 });
 

@@ -36,6 +36,7 @@ export async function GET({ url }) {
 
   const posts = await Post.find()
     .populate("authorId", "username displayName avatarUrl staff")
+    .populate("mentions", "displayName")
     .sort({ postedAt: timeSort })
     .skip(offset)
     .limit(20)
