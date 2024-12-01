@@ -33,7 +33,7 @@ export async function GET({ params }) {
   let post = await Post.findById(postId)
     .populate(
       "authorId",
-      "username displayName avatarUrl staff",
+      "username displayName avatarUrl staff verified",
     )
     .populate("mentions", "displayName");
 

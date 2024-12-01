@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Ellipsis, Trash, Ban, ShieldCheck } from "lucide-svelte";
+    import { Ellipsis, Trash, Ban, ShieldCheck, BadgeCheck, BadgeX } from "lucide-svelte";
     import { state } from "$lib/state.svelte";
     import { getCookie } from "typescript-cookie";
     import { browser } from "$app/environment";
@@ -18,7 +18,7 @@
         });
     }
 
-    async function ban(username) {
+    async function ban(username: string) {
         const res = await fetch(`/api/v1/users/${username}/ban`, {
             method: "POST",
             headers: {
@@ -33,7 +33,7 @@
         }
     }
 
-    async function unban(username) {
+    async function unban(username: string) {
         const res = await fetch(`/api/v1/users/${username}/ban`, {
             method: "DELETE",
             headers: {
@@ -48,7 +48,7 @@
         }
     }
 
-    async function purge(username) {
+    async function purge(username: string) {
         const res = await fetch(`/api/v1/users/${username}/purge`, {
             method: "POST",
             headers: {
@@ -59,6 +59,34 @@
 
         if (res.ok) {
             window.location.reload();
+        }
+    }
+
+    async function verify(username: string) {
+        const res = await fetch(`/api/v1/users/${username}/verify`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${getCookie("token")}`,
+            },
+        });
+
+        if (res.ok) {
+            user.verified = true;
+        }
+    }
+
+    async function unverify(username: string) {
+        const res = await fetch(`/api/v1/users/${username}/verify`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${getCookie("token")}`,
+            },
+        });
+
+        if (res.ok) {
+            user.verified = false;
         }
     }
 </script>
@@ -75,6 +103,26 @@
         {#if open}
             <div class="absolute mt-1 bg-ctp-mantle rounded-md p-2">
                 {#if state.user && state.user.staff}
+                    {#if user.verified}
+                        <button
+                            class="unique"
+                            on:click={() => unverify(user.username)}
+                        >
+                            <BadgeX size={24} class="my-auto" />
+                            <span class="ml-1 text-lg">Unverify</span>
+                        </button>
+                    {:else}
+                        <button
+                            class="unique"
+                            on:click={() => verify(user.username)}
+                        >
+                            <BadgeCheck size={24} class="my-auto" />
+                            <span class="ml-1 text-lg">Verify</span>
+                        </button>
+                    {/if}
+
+                    <hr class="my-1 border-ctp-surface1" />
+
                     <button
                         class="unique text-ctp-red"
                         on:click={() => purge(user.username)}
@@ -84,6 +132,8 @@
                     </button>
 
                     <hr class="my-1 border-ctp-surface1" />
+
+
 
                     {#if user.banned}
                         <button

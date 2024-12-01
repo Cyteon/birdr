@@ -29,6 +29,7 @@ export async function GET({ params }) {
     avatarUrl: user.avatarUrl,
     banned: user.banned,
     staff: user.staff,
+    verified: user.verified,
     posts,
   });
 }
