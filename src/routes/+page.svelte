@@ -134,10 +134,10 @@
                     </select>
 
                     <button
-                        class={`px-5 flex transition-colors duration-300 ${
+                        class={`unique p-2 rounded-md text-ctp-crust flex transition-colors duration-300 ${
                             postContent.length === 0
                                 ? "bg-ctp-surface1 text-ctp-subtext1"
-                                : ""
+                                : "bg-ctp-blue"
                         }`}
                         disabled={postContent.length === 0}
                         onclick={post}

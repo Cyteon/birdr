@@ -1,5 +1,6 @@
 import { verifyRequest } from "$lib/server/verifyRequest.server";
 import Post from "$lib/models/Post";
+import Comment from "$lib/models/Comment";
 
 export async function DELETE({ request, params }) {
   // ⚠️ Restricted Endpoint ⚠️ (unless you're the post author)
@@ -37,9 +38,25 @@ export async function GET({ params }) {
     )
     .populate("mentions", "displayName");
 
+
   if (!post) {
     return Response.json({ message: "Post not found" }, { status: 404 });
   }
 
-  return Response.json(post);
+  let comments = await Comment.find({ postId }).populate(
+    "authorId",
+    "username displayName avatarUrl staff verified",
+  )
+    .populate("mentions", "displayName")
+    .sort({ postedAt: -1 })
+    .exec();
+
+  if (!comments) {
+    comments = [];
+  }
+  
+  return Response.json({
+    comments,
+    ...post.toJSON(),
+  });
 }

@@ -7,7 +7,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "lint": "eslint --ext .js,.ts,.svelte src"
   },
   "devDependencies": {
     "@sveltejs/adapter-auto": "^3.0.0",
@@ -15,6 +16,7 @@
     "@sveltejs/vite-plugin-svelte": "^4.0.0",
     "@types/bcrypt": "^5.0.2",
     "autoprefixer": "^10.4.20",
+    "eslint": "^9.16.0",
     "svelte": "^5.0.0",
     "svelte-check": "^4.0.0",
     "sveltekit-rate-limiter": "^0.6.1",

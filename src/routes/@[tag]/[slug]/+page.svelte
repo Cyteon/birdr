@@ -5,6 +5,9 @@
     import { onMount } from "svelte";
     import MessageOptionsDropdown from "$lib/components/MessageOptionsDropdown.svelte";
     import Badges from "$lib/components/Badges.svelte";
+    import { state as _state } from "$lib/state.svelte";
+    import { Send } from "lucide-svelte";
+    import { getCookie } from "typescript-cookie";
 
     let { data } = $props();
 
@@ -12,6 +15,10 @@
     let phone = $state(false);
 
     let post = $state(null);
+
+    let commentContent = $state("");
+    let commentingError = $state("");
+
 
     onMount(async () => {
         const res = await fetch(`/api/v1/posts/${data.slug}`, {
@@ -34,6 +41,31 @@
         });
 
         phone = window.innerWidth < 768;
+    }
+
+    async function comment() {
+        commentingError = "";
+
+        const res = await fetch(`/api/v1/posts/${data.slug}/comments`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${getCookie("token")}`,
+            },
+            body: JSON.stringify({ content: commentContent }),
+        });
+
+        if (res.ok) {
+            commentContent = "";
+
+            let newComment = await res.json();
+
+            newComment.authorId = _state.user;
+
+            post.comments = [newComment, ...post.comments];
+        } else {
+            commentingError = "An error occurred while commenting";
+        }
     }
 </script>
 
@@ -84,6 +116,83 @@
                         </p>
                     </div>
                 </div>
+
+                <div class="px-3 py-3 border-b border-b-ctp-surface0">
+                    {#if _state.user}
+                        <div>
+                            <textarea
+                                class={`
+                                w-full p-2 border border-ctp-surface0 bg-ctp-mantle rounded-md
+                                focus:outline-none focus:border-ctp-surface2 transition-color duration-500
+                                ${commentContent.length > 0 ? "h-32" : "h-11"}
+                            `}
+                                placeholder="Write a comment..."
+                                maxlength="1000"
+                                bind:value={commentContent}
+                            ></textarea>
+                            <p class="mb-2 text-ctp-red text-right">
+                                {commentingError}
+                            </p>
+                            <div class="flex w-full justify-end">
+                                <button
+                                    class={`unique p-2 rounded-md text-ctp-crust flex transition-colors duration-300 ${
+                                        commentContent.length === 0
+                                            ? "bg-ctp-surface1 text-ctp-subtext1"
+                                            : "bg-ctp-blue"
+                                    }`}
+                                    disabled={commentContent.length === 0}
+                                    onclick={comment}
+                                >
+                                    <Send size={24} class="my-auto" />
+                                    <span class="ml-2 text-lg mb-0.5">Comment</span>
+                                </button>
+                            </div>
+                        </div>
+                    {:else}
+                        <div>
+                            <h1 class="text-3xl"><a href="/auth/login">Login</a> to comment</h1>
+                        </div>
+                    {/if}
+                </div>
+
+                {#each post.comments as comment}
+                    <div class="px-3 py-4 border-b border-b-ctp-surface0 flex">
+                        <img
+                            src={comment.authorId.avatarUrl}
+                            alt={comment.authorId.username}
+                            class="w-14 h-14 rounded-full object-cover"
+                        />
+                        <div class="ml-2 w-full">
+                            <div class="flex w-full">
+                                <h1 class="text-2xl font-bold leading-none">
+                                    {comment.authorId.displayName}
+                                </h1>
+                                <Badges user={comment.authorId} small={true} />
+                                <span
+                                    class="text-ctp-subtext0 ml-1 mt-[5px] leading-none my-auto"
+                                >
+                                    @{comment.authorId.username}
+                                </span>
+                                <span class="ml-auto flex">
+                                    {#if !phone}
+                                        <span class="text-ctp-subtext1"
+                                            >{createTimeString(comment.postedAt)}</span
+                                        >
+                                    {/if}
+
+                                    <MessageOptionsDropdown
+                                        link={window.location.href}
+                                        content={comment.content}
+                                        authorId={comment.authorId._id}
+                                    />
+                                </span>
+                            </div>
+                            <p class="text-lg prose break-words">
+                                {@html parsePost(comment, false)}
+                            </p>
+                        </div>
+                    </div>
+                {/each}
             </div>
         {/if}
     </div>
