@@ -6,9 +6,9 @@ import { typeid } from "typeid-ts";
 export async function POST({ request }) {
   const { email, password, username, displayName } = await request.json();
 
-  if (username.includes(" ")) {
+  if (/[^a-zA-Z0-9_]/.test(username)) {
     return Response.json(
-      { message: "Username cannot contain spaces" },
+      { message: "Username can only contain letters, numbers and underscores" },
       { status: 400 },
     );
   }

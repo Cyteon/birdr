@@ -33,6 +33,17 @@ export async function PATCH({ request }) {
   if (username) {
     let existingUser = await User.findOne({ username });
 
+    if (/[^a-zA-Z0-9_]/.test(username)) {
+      return Response.json(
+        { message: "Username can only contain letters, numbers and underscores" },
+        { status: 400 },
+      );
+    }
+
+    if (username.length > 20) {
+      return Response.json({ message: "Username too long" }, { status: 400 });
+    }
+
     if (existingUser) {
       return Response.json(
         { message: "Username already taken" },
