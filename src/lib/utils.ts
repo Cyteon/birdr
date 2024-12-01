@@ -38,11 +38,12 @@ export function parsePost(post, clip = true, url = "") {
       if (imageExtensions.includes(extension)) {
         text = text.replace(
           link,
-          `<img src="${link}" alt="Image" class="post-image max-w-[80%] max-h-[500px]" />`,
+          `<img src="${link}" alt="Image" class="post-image" />`,
         );
       }
     }
   }
+  
 
   let parsed = DOMPurify.sanitize(marked(text) as string);
 
