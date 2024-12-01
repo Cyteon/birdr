@@ -68,6 +68,10 @@ export async function PATCH({ request }) {
   }
 
   if (avatar) {
+    if (Buffer.byteLength(avatar, "base64") > 2 * 1024 * 1024) {
+      return Response.json({ message: "Avatar should be less than 2MB" }, { status: 400 });
+    }
+
     var buf = Buffer.from(
       avatar.replace(/^data:image\/\w+;base64,/, ""),
       "base64",
