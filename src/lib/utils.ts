@@ -58,15 +58,23 @@ export function parsePost(post, clip = true, url = "") {
       if (post.ogData[link.replace(".", "_-_")] && !doneEmbeds.includes(link)) {
         const ogData = post.ogData[link.replace(".", "_-_")];
 
-        let image = ogData.ogImage[0];
+        let image
+
+        if (ogData.ogImage) {
+          image = ogData.ogImage[0];
+        }
 
         text += 
           `<div class="bg-ctp-mantle p-2 mb-1 size-fit rounded-md max-w-xl border border-ctp-surface0">
             <a class="text-xl font-bold m-0" href="${ogData.url}">${ogData.ogTitle}</a>
             <p class="m-0 text-sm">${ogData.ogDescription}</p>
-            <img src="${image.url}" alt="${ogData.ogTitle}" class="post-image mb-0 mt-1" width="256" />
-          </div>
         `;
+
+        if (image) {
+          text += `<img src="${image.url}" alt="${ogData.ogTitle}" class="post-image mb-0 mt-1" width="256" />`;
+        }
+
+        text += "</div>";
 
         doneEmbeds.push(link);
       }
