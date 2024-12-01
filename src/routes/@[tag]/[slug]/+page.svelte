@@ -79,7 +79,7 @@
                                 />
                             </span>
                         </div>
-                        <p class="text-lg prose">
+                        <p class="text-lg prose break-words">
                             {@html parsePost(post, false)}
                         </p>
                     </div>
