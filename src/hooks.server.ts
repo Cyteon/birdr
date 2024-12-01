@@ -18,7 +18,7 @@ const limiters = {
   },
   "/api/v1/auth/login": {
     limiter: new RetryAfterRateLimiter({
-      IP: [10, "30m"],
+      IP: [[20, "10m"], [40, "30m"]],
     }),
     methods: ["POST"],
   },
