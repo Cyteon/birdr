@@ -12,6 +12,7 @@
             <img
                 src="https://i.imgur.com/YOKDbfI.png"
                 alt="staff-badge"
+                class="badge"
                 width={small ? "18" : "22"}
                 height={small ? "18" : "22"}
             />
@@ -21,6 +22,7 @@
             <img
                 src="https://i.imgur.com/mpt9Hx0.png"
                 alt="verified-badge"
+                class="badge"
                 width={small ? "18" : "22"}
                 height={small ? "18" : "22"}
             />
