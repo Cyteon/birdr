@@ -22,7 +22,7 @@ export function parsePost(post, clip = true, url = "") {
       if (mentionData) {
         text = text.replace(
           mention,
-          `<a href="/${mention}" class="no-underline">@${mentionData.displayName}</a>`,
+          `<a href="/${mention}" class="no-underline">@${mentionData.displayName || mention.slice(1)}</a>`,
         );
       }
     }
