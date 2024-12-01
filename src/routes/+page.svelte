@@ -1,6 +1,6 @@
 <script lang="ts">
     import SideBar from "$lib/components/SideBar.svelte";
-    import { Send } from "lucide-svelte";
+    import { Send, MessageSquare } from "lucide-svelte";
     import { browser } from "$app/environment";
     import { getCookie } from "typescript-cookie";
     import { onMount } from "svelte";
@@ -196,6 +196,12 @@
                             `/@${post.authorId.username}/${post._id}`,
                         )}
                     </p>
+                    <div class="flex mt-2">
+                        <a href={`/@${post.authorId.username}/${post._id}`} class="flex">
+                            <MessageSquare size={24} class="my-auto" />
+                            <span class="ml-1 mb-1">{post.commentCount}</span>
+                        </a>
+                    </div>
                 </div>
             </div>
         {/each}

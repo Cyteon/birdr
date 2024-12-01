@@ -1,6 +1,7 @@
 import { verifyRequest } from "$lib/server/verifyRequest.server";
 import Post from "$lib/models/Post";
 import User from "$lib/models/User";
+import Comment from "$lib/models/Comment";
 import ogs from "open-graph-scraper";
 
 async function getOGData(post) {
@@ -75,5 +76,17 @@ export async function GET({ url }) {
     .limit(20)
     .exec();
 
-  return Response.json(posts);
+  // get comment count for each post
+
+  const commentCounts = await Comment.aggregate([
+    { $group: { _id: "$postId", count: { $sum: 1 } } },
+  ]);
+
+  return Response.json(
+    posts.map((post) => {
+      let postObj = post.toJSON();
+      postObj.commentCount = commentCounts.find((c) => c._id.toString() === post._id.toString())?.count || 0;
+      return postObj;
+    }),
+  );
 }
