@@ -31,6 +31,7 @@
     "lucide-svelte": "^0.462.0",
     "marked": "^15.0.3",
     "mongoose": "^8.8.3",
+    "open-graph-scraper": "^6.8.2",
     "picomatch": "^4.0.2",
     "typeid-ts": "^0.3.8",
     "typescript-cookie": "^1.0.6"

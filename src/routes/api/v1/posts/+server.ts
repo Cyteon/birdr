@@ -1,6 +1,29 @@
 import { verifyRequest } from "$lib/server/verifyRequest.server";
 import Post from "$lib/models/Post";
 import User from "$lib/models/User";
+import ogs from "open-graph-scraper";
+
+async function getOGData(post) {
+  const links = post.content.match(/https?:\/\/[^\s]+/g);
+  let ogData = {};
+
+  if (!links) return;
+
+  for (let link of links) {
+    try {
+      const { result } = await ogs({ url: link });
+
+      if (result.success) {
+        let linkOk = link.replaceAll(".", "_-_");
+
+        ogData[linkOk] = result;
+      }
+    } catch {}
+  }
+
+  post.ogData = ogData;
+  await post.save();
+}
 
 export async function PUT({ request }) {
   const user = await verifyRequest(request);
@@ -26,6 +49,8 @@ export async function PUT({ request }) {
   }
 
   let post = await Post.create({ content, authorId: user.id, mentions });
+
+  getOGData(post).catch(console.error);
 
   return Response.json(post);
 }

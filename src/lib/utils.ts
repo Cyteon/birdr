@@ -28,6 +28,22 @@ export function parsePost(post, clip = true, url = "") {
     }
   }
 
+  const links = post.content.match(/https?:\/\/[^\s]+/g);
+  const imageExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
+
+  if (links) {
+    for (let link of links) {
+      const extension = link.split(".").pop().toLowerCase().split("?")[0];
+
+      if (imageExtensions.includes(extension)) {
+        text = text.replace(
+          link,
+          `<img src="${link}" alt="Image" class="post-image max-w-[75%]" />`,
+        );
+      }
+    }
+  }
+
   let parsed = DOMPurify.sanitize(marked(text) as string);
 
   return parsed;
