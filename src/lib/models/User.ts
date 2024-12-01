@@ -7,6 +7,7 @@ export interface UserType {
   displayName: String;
   staff: Boolean;
   verified: Boolean;
+  otherBadges: String[];
   banned: Boolean;
   avatarUrl: String;
 }
@@ -23,6 +24,7 @@ export const userSchema = new mongoose.Schema<UserType>({
   displayName: { type: String, required: false },
   staff: { type: Boolean, default: false },
   verified: { type: Boolean, default: false },
+  otherBadges: { type: [String], default: [] },
   banned: { type: Boolean, default: false },
   avatarUrl: {
     type: String,

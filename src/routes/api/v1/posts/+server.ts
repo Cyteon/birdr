@@ -68,7 +68,7 @@ export async function GET({ url }) {
   let offset = parseInt(url.searchParams.get("offset")) || 0;
 
   const posts = await Post.find()
-    .populate("authorId", "username displayName avatarUrl staff verified")
+    .populate("authorId", "username displayName avatarUrl staff verified otherBadges")
     .populate("mentions", "displayName")
     .sort({ postedAt: timeSort })
     .skip(offset)

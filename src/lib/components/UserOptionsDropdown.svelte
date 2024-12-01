@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Ellipsis, Trash, Ban, ShieldCheck, BadgeCheck, BadgeX } from "lucide-svelte";
+    import { Ellipsis, Trash, Ban, ShieldCheck, BadgeCheck, BadgeX, Badge } from "lucide-svelte";
     import { state } from "$lib/state.svelte";
     import { getCookie } from "typescript-cookie";
     import { browser } from "$app/environment";
@@ -8,6 +8,8 @@
 
     let banned = false;
     let open = false;
+    let showAddBadge = false;
+    let badge = "";
     let unqiueId = Math.random().toString(36).substring(7);
 
     if (browser) {
@@ -89,6 +91,22 @@
             user.verified = false;
         }
     }
+
+    async function addBadge(username: string) {
+        const res = await fetch(`/api/v1/users/${username}/badges`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${getCookie("token")}`,
+            },
+            body: JSON.stringify({ badge }),
+        });
+
+        if (res.ok) {
+            user.otherBadges?.push(badge);
+            showAddBadge = false;
+        }
+    }
 </script>
 
 {#if state.user?.staff}
@@ -103,6 +121,14 @@
         {#if open}
             <div class="absolute mt-1 bg-ctp-mantle rounded-md p-2">
                 {#if state.user && state.user.staff}
+                <button
+                    class="unique"
+                    on:click={() => showAddBadge = true}
+                >
+                    <Badge size={24} class="my-auto" />
+                    <span class="ml-1 text-lg">Add Badge</span>
+                </button>
+
                     {#if user.verified}
                         <button
                             class="unique"
@@ -158,8 +184,21 @@
     </div>
 {/if}
 
+{#if showAddBadge}
+<div class="absolute flex h-screen w-full bg-ctp-crust/40 top-0 left-0">
+    <div class="m-auto p-5 bg-ctp-mantle border border-ctp-surface0 rounded-md">
+        <h1 class="font-bold text-2xl">Add Badge</h1>
+        <input type="text" class="text-lg w-full p-2 mt-2 border border-ctp-surface0 bg-ctp-crust rounded-md" placeholder="Image URL" bind:value={badge} />
+        <button class="unique2 text-xl p-2 flex justify-center mt-2 rounded-md w-full" on:click={() => addBadge(user.username)}>
+            <Badge size={24} class="my-auto" />
+            <span class="ml-1">Add Badge</span>
+        </button>  
+    </div>
+</div>
+{/if}
+
 <style>
-    button:not(.open) {
+    button:not(.open, .unique2) {
         @apply transition-all duration-300 flex p-2 w-full text-left hover:bg-ctp-crust/60 rounded-md;
     }
 </style>
