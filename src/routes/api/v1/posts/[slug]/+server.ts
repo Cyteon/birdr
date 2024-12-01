@@ -32,21 +32,15 @@ export async function GET({ params }) {
   let postId = params.slug;
 
   let post = await Post.findById(postId)
-    .populate(
-      "authorId",
-      "username displayName avatarUrl staff verified",
-    )
+    .populate("authorId", "username displayName avatarUrl staff verified")
     .populate("mentions", "displayName");
-
 
   if (!post) {
     return Response.json({ message: "Post not found" }, { status: 404 });
   }
 
-  let comments = await Comment.find({ postId }).populate(
-    "authorId",
-    "username displayName avatarUrl staff verified",
-  )
+  let comments = await Comment.find({ postId })
+    .populate("authorId", "username displayName avatarUrl staff verified")
     .populate("mentions", "displayName")
     .sort({ postedAt: -1 })
     .exec();
@@ -54,7 +48,7 @@ export async function GET({ params }) {
   if (!comments) {
     comments = [];
   }
-  
+
   return Response.json({
     comments,
     ...post.toJSON(),

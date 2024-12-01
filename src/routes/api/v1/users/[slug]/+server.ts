@@ -22,7 +22,7 @@ export async function GET({ params }) {
     .populate("mentions", "displayName")
     .limit(50)
     .sort({ postedAt: -1 });
-  
+
   let commentCount = await Comment.aggregate([
     { $match: { authorId: user._id } },
     { $group: { _id: "$postId", count: { $sum: 1 } } },
@@ -39,8 +39,10 @@ export async function GET({ params }) {
     verified: user.verified,
     posts: posts.map((post) => {
       let postObj = post.toJSON();
-      postObj.commentCount = commentCount.find((c) => c._id.toString() === post._id.toString())?.count || 0;
+      postObj.commentCount =
+        commentCount.find((c) => c._id.toString() === post._id.toString())
+          ?.count || 0;
       return postObj;
-    })
+    }),
   });
 }

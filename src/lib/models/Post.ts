@@ -6,7 +6,7 @@ export interface ogData {
   ogUrl?: string;
   ogDescription?: string;
   ogImage?: {
-    height: string
+    height: string;
     url: string;
     width: string;
     type: string;
@@ -44,7 +44,6 @@ export const postSchema = new mongoose.Schema<PostType>({
     },
     default: {},
   },
-
 });
 
 export default mongoose.models.Post || mongoose.model("Post", postSchema);

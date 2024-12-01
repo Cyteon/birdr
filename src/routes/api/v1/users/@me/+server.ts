@@ -28,7 +28,10 @@ export async function PATCH({ request }) {
 
   if (displayName) {
     if (displayName.length > 30) {
-      return Response.json({ message: "Display name too long" }, { status: 400 });
+      return Response.json(
+        { message: "Display name too long" },
+        { status: 400 },
+      );
     }
 
     user.displayName = displayName;
@@ -39,7 +42,9 @@ export async function PATCH({ request }) {
 
     if (/[^a-zA-Z0-9_]/.test(username)) {
       return Response.json(
-        { message: "Username can only contain letters, numbers and underscores" },
+        {
+          message: "Username can only contain letters, numbers and underscores",
+        },
         { status: 400 },
       );
     }
@@ -84,7 +89,10 @@ export async function PATCH({ request }) {
 
   if (avatar) {
     if (Buffer.byteLength(avatar, "base64") > 2 * 1024 * 1024) {
-      return Response.json({ message: "Avatar should be less than 2MB" }, { status: 400 });
+      return Response.json(
+        { message: "Avatar should be less than 2MB" },
+        { status: 400 },
+      );
     }
 
     var buf = Buffer.from(

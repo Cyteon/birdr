@@ -8,7 +8,8 @@
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-    "lint": "eslint --ext .js,.ts,.svelte src"
+    "lint": "eslint --ignore-pattern node_modules/ --ignore-pattern .svelte-kit/ .",
+    "lint:fix": "eslint --ignore-pattern node_modules/ --ignore-pattern .svelte-kit/ --fix ."
   },
   "devDependencies": {
     "@sveltejs/adapter-auto": "^3.0.0",
@@ -35,6 +36,7 @@
     "mongoose": "^8.8.3",
     "open-graph-scraper": "^6.8.2",
     "picomatch": "^4.0.2",
+    "prettier": "^3.4.1",
     "typeid-ts": "^0.3.8",
     "typescript-cookie": "^1.0.6"
   }
