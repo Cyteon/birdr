@@ -37,6 +37,11 @@
         }
 
         if (username !== "") {
+            if (username.length > 20) {
+                userInfoError = "Username must be less than 20 characters!";
+                return;
+            }
+
             body.username = username;
         }
 
