@@ -30,6 +30,7 @@ export function parsePost(post, clip = true, url = "") {
 
   const links = post.content.match(/https?:\/\/[^\s]+/g);
   const imageExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
+  const videoExtensions = ["mp4", "webm"];
 
   if (links) {
     for (let link of links) {
@@ -39,6 +40,13 @@ export function parsePost(post, clip = true, url = "") {
         text = text.replace(
           link,
           `<img src="${link}" alt="Image" class="post-image" />`,
+        );
+      }
+
+      if (videoExtensions.includes(extension)) {
+        text = text.replace(
+          link,
+          `<video src="${link}" controls class="post-video" />`,
         );
       }
     }

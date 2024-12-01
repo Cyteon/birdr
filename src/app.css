@@ -14,3 +14,8 @@ img:not(.badge) {
     max-width: 80%;
     max-height: 500px;
 }
+
+video {
+    max-width: 100%;
+    max-height: 500px;
+}
