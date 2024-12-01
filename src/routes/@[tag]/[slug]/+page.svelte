@@ -88,9 +88,9 @@
                     />
                     <div class="ml-2 w-full">
                         <div class="flex w-full">
-                            <h1 class="text-2xl font-bold leading-none">
+                            <a class="text-2xl font-bold leading-none" href={`/@${post.authorId.username}`}>
                                 {post.authorId.displayName}
-                            </h1>
+                            </a>
                             <Badges user={post.authorId} small={true} />
                             <span
                                 class="text-ctp-subtext0 ml-1 mt-[5px] leading-none my-auto"
@@ -164,9 +164,9 @@
                         />
                         <div class="ml-2 w-full">
                             <div class="flex w-full">
-                                <h1 class="text-2xl font-bold leading-none">
+                                <a class="text-2xl font-bold leading-none" href={`/@${comment.authorId.username}`}>
                                     {comment.authorId.displayName}
-                                </h1>
+                                </a>
                                 <Badges user={comment.authorId} small={true} />
                                 <span
                                     class="text-ctp-subtext0 ml-1 mt-[5px] leading-none my-auto"
