@@ -17,6 +17,10 @@ export async function POST({ request }) {
     return Response.json({ message: "Username too long" }, { status: 400 });
   }
 
+  if (displayName.length > 30) {
+    return Response.json({ message: "Display name too long" }, { status: 400 });
+  }
+
   const existing = await User.find({
     $or: [{ email }, { username }],
   });

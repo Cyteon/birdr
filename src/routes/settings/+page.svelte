@@ -33,6 +33,11 @@
         let body = {};
 
         if (displayName !== "") {
+            if (displayName.length > 30) {
+                userInfoError = "Display name must be less than 30 characters!";
+                return;
+            }
+
             body.displayName = displayName;
         }
 

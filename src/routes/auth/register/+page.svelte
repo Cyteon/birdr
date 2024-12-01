@@ -30,6 +30,12 @@
             return;
         }
 
+        if (displayName.length > 30) {
+            error = "Display name must be less than 30 characters long";
+            loading = false;
+            return;
+        }
+
         if (password.length < 8) {
             error = "Password must be at least 8 characters long";
             loading = false;

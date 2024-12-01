@@ -27,6 +27,10 @@ export async function PATCH({ request }) {
   let { displayName, username, avatar } = await request.json();
 
   if (displayName) {
+    if (displayName.length > 30) {
+      return Response.json({ message: "Display name too long" }, { status: 400 });
+    }
+
     user.displayName = displayName;
   }
 
