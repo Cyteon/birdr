@@ -55,7 +55,7 @@ export function parsePost(post, clip = true, url = "") {
         );
       }
 
-      if (post.ogData[link.replace(".", "_-_")] && !doneEmbeds.includes(link)) {
+      if (post.ogData && post.ogData[link.replace(".", "_-_")] && !doneEmbeds.includes(link)) {
         const ogData = post.ogData[link.replace(".", "_-_")];
 
         let image
