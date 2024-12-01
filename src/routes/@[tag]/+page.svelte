@@ -115,6 +115,7 @@
                         ${postContent.length > 0 ? "h-32" : "h-11"}
                     `}
                         placeholder={`What's on your mind today @${user.username}?`}
+                        maxlength="4000"
                         bind:value={postContent}
                     ></textarea>
                     <p class="mb-2 text-ctp-red text-right">

@@ -34,6 +34,14 @@ export async function PUT({ request }) {
 
   const { content } = await request.json();
 
+  if (!content) {
+    return Response.json({ message: "Content missing" }, { status: 400 });
+  }
+
+  if (content.length > 4000) {
+    return Response.json({ message: "Content too long" }, { status: 400 });
+  }
+
   let usersMentioned = content.match(/(?<=^|\s)@(\w+)(?=\s|$)/g);
   let mentions = {};
 
