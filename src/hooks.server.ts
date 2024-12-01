@@ -27,9 +27,11 @@ const limiters = {
       cookie: {
         name: LIMITER_COOKIE_NAME,
         secret: LIMITER_COOKIE_SECRET,
-        rate: [10, "10m"],
+        rate: [12, "10m"],
         preflight: false,
       },
+      IPUA: [12, "10m"],
+      IP: [100, "h"],
     }),
     methods: ["PUT"],
   },
