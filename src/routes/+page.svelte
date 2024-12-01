@@ -61,7 +61,7 @@
             },
         );
 
-        observer.observe(document.getElementById("bottom"));
+        observer.observe(document.getElementById("bottom")!);
     });
 
     async function newSort(sort) {
@@ -93,7 +93,7 @@
 
             post.authorId = state.user;
 
-            posts.unshift(post);
+            posts = [post, ...posts];
             postContent = "";
         } else {
             let data = await res.json();

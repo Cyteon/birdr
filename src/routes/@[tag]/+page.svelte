@@ -63,8 +63,6 @@
 
             user.posts.unshift(post);
             postContent = "";
-
-            console.log(user);
         } else {
             let data = await res.json();
 
