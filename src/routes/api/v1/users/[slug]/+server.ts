@@ -1,9 +1,11 @@
 import User from "$lib/models/User";
 import Post from "$lib/models/Post";
 import Comment from "$lib/models/Comment";
+import Follow from "$lib/models/Follow";
 import UsernameRedirect from "$lib/models/UsernameRedirect";
+import { verifyRequest } from "$lib/server/verifyRequest.server";
 
-export async function GET({ params }) {
+export async function GET({ params, request }) {
   let username = params.slug;
 
   let user = await User.findOne({ username });
@@ -27,6 +29,25 @@ export async function GET({ params }) {
     { $group: { _id: "$postId", count: { $sum: 1 } } },
   ]);
 
+  const followingCount = await Follow.countDocuments({ user: user._id });
+  const followerCount = await Follow.countDocuments({ following: user._id });
+  let isFollowing = false;
+
+  if (request.headers.get("Authorization") ||  request.headers.get("cookie")) {
+    let me = await verifyRequest(request);
+
+    if (user) {
+      let following = await Follow.findOne({
+        user: me._id,
+        following: user._id,
+      });
+
+      if (following) {
+        isFollowing = true;
+      }
+    }
+  }
+
   return Response.json({
     _id: user._id,
     username: user.username,
@@ -36,6 +57,9 @@ export async function GET({ params }) {
     otherBadges: user.otherBadges,
     staff: user.staff,
     verified: user.verified,
+    followingCount,
+    followerCount,
+    isFollowing,
     posts: posts.map((post) => {
       let postObj = post.toJSON();
       postObj.commentCount =

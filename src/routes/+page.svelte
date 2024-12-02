@@ -14,6 +14,7 @@
 
     let search = "";
 
+    let tab = "explore";
     let sorting = "desc";
     let phone = false;
     let noMorePosts = false;
@@ -69,7 +70,13 @@
     async function newSort(sort) {
         sorting = sort;
 
-        const res = await fetch(`/api/v1/posts?sort=${sort}`, {
+        let params = `?sort=${sorting}`;
+
+        if (tab === "following") {
+            params += "&following=true";
+        }
+
+        const res = await fetch(`/api/v1/posts${params}`, {
             headers: {
                 "Content-Type": "application/json",
             },
@@ -126,7 +133,7 @@
         >
 
             {#if state.user}
-                <div class="pb-2 px-3 mt-2 border-b-4 border-b-ctp-surface0">
+                <div class="pb-2 px-3 mt-2 border-b-2 border-b-ctp-surface0">
                     <h1 class="text-2xl font-bold mb-2">New Post</h1>
                     <textarea
                         class={`
@@ -144,7 +151,7 @@
                     <div class="flex w-full justify-end">
                         <select
                             class="p-2 rounded-lg bg-ctp-crust outline-none text-lg mr-auto"
-                            onchange={() => newSort(event.target.value)}
+                            onchange={(event) => newSort(event.target.value)}
                         >
                             <option value="desc">Newest</option>
                             <option value="asc">Oldest</option>
@@ -168,8 +175,30 @@
                 </div>
             {/if}
 
+            <div class="border-b-2 border-b-ctp-surface0 py-2 px-2 w-full flex">
+                <button 
+                    class={`unique tabButton ${tab === "explore" ? "bg-ctp-crust/50" : ""}`}
+                    onclick={() => {
+                        tab = "explore";
+                        newSort(sorting);
+                    }}
+                >
+                    Explore
+                </button>
+
+                <button 
+                    class={`unique tabButton ${state.user ? "" : "hidden"} ${tab === "following" ? "bg-ctp-crust/50" : ""}`}
+                    onclick={() => {
+                        tab = "following";
+                        newSort(sorting);
+                    }}
+                >
+                    Following
+                </button>
+            </div>
+
             {#each posts as post}
-                <div class="py-3 px-3 border-b border-b-ctp-surface0" id={post._id}>
+                <div class="p-3 border-b border-b-ctp-surface0" id={post._id}>
                     {#if post.pinned}
                         <p class="text-lg flex mb-3 text-ctp-subtext1">
                             <Pin size={24} class="my-auto" />
@@ -241,3 +270,15 @@
         </div>
     </div>
 </div>
+
+<style>
+    .tabButton {
+        width: 100%;
+
+        @apply mx-1 transition-colors duration-500 p-2 rounded-md text-lg;
+    }
+
+    .tabButton:hover {
+        @apply bg-ctp-crust/50;
+    }
+</style>

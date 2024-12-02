@@ -10,7 +10,7 @@
     let open = false;
     let showAddBadge = false;
     let badge = "";
-    let unqiueId = Math.random().toString(36).substring(7);
+    let unqiueId = `dropdown-${Math.random().toString(36).substring(7)}`;
 
     if (browser) {
         document.addEventListener("click", (e) => {

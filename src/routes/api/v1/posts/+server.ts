@@ -2,6 +2,7 @@ import { verifyRequest } from "$lib/server/verifyRequest.server";
 import Post from "$lib/models/Post";
 import User from "$lib/models/User";
 import Comment from "$lib/models/Comment";
+import Follow from "$lib/models/Follow";
 import ogs from "open-graph-scraper";
 
 async function getOGData(post) {
@@ -64,11 +65,27 @@ export async function PUT({ request }) {
   return Response.json(post);
 }
 
-export async function GET({ url }) {
-  let timeSort = url.searchParams.get("sort") === "asc" ? 1 : -1;
-  let offset = parseInt(url.searchParams.get("offset")) || 0;
+export async function GET({ request, url }) {
+  const timeSort = url.searchParams.get("sort") === "asc" ? 1 : -1;
+  const offset = parseInt(url.searchParams.get("offset")) || 0;
 
-  const posts = await Post.find()
+  let filter = {}
+
+  const following = url.searchParams.get("following");
+
+  if (following) {
+    const user = await verifyRequest(request);
+
+    if (!user) {
+      return Response.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
+    const followingIds = await Follow.find({ user: user._id }).select("following");
+
+    filter.authorId = { $in: followingIds.map((f) => f.following) };
+  }
+
+  const posts = await Post.find(filter)
     .populate(
       "authorId",
       "username displayName avatarUrl staff verified otherBadges",

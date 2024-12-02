@@ -69,6 +69,24 @@
             postingError = data.message;
         }
     }
+
+    async function follow() {
+        const res = await fetch(`/api/v1/users/${user.username}/follow`, {
+            method: user.isFollowing ? "DELETE" : "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${getCookie("token")}`,
+            },
+        });
+
+        if (res.ok) {
+            user.isFollowing = !user.isFollowing;
+
+            user.isFollowing
+                ? user.followerCount++
+                : user.followerCount--;
+        }
+    }
 </script>
 
 {#if user}
@@ -94,10 +112,24 @@
                         <p class="text-xl text-ctp-subtext0">
                             @{user.username}
                         </p>
+                        <div class="flex w-full">
+                            <p class="text-xl">
+                                <span class="font-semibold">{user.followingCount}</span> Following
+                                <span class="font-semibold ml-1">{user.followerCount}</span> Followers
+                            </p>
+                        </div>
                     </div>
 
-                    <div class="ml-auto">
-                        <UserOptionsDropdown {user} />
+                    <div class="ml-auto flex flex-col">
+                        <div class="justify-end flex">
+                            <UserOptionsDropdown {user} />
+                        </div>
+
+                        {#if user._id != _state.user._id}
+                            <button class={`unique py-1 px-2 rounded-md mt-auto ${user.isFollowing ? "bg-ctp-surface1 text-ctp-subtext1" : "bg-ctp-blue text-ctp-crust"}`} onclick={follow}>
+                                {user.isFollowing ? "Unfollow" : "Follow"}
+                            </button>
+                        {/if}
                     </div>
                 </div>
 
