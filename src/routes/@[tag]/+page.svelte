@@ -59,10 +59,7 @@
         });
 
         if (res.ok) {
-            let post = await res.json();
-
-            user.posts.unshift(post);
-            postContent = "";
+            window.location.reload();
         } else {
             let data = await res.json();
 

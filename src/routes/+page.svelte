@@ -104,12 +104,7 @@
         });
 
         if (res.ok) {
-            let post = await res.json();
-
-            post.authorId = state.user;
-
-            posts = [post, ...posts];
-            postContent = "";
+            window.location.reload();
         } else {
             let data = await res.json();
 
