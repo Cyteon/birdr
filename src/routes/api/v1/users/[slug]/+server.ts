@@ -24,7 +24,6 @@ export async function GET({ params }) {
     .sort({ postedAt: -1 });
 
   let commentCount = await Comment.aggregate([
-    { $match: { authorId: user._id } },
     { $group: { _id: "$postId", count: { $sum: 1 } } },
   ]);
 
