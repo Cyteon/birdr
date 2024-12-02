@@ -150,7 +150,7 @@
                         </div>
                     {:else}
                         <div>
-                            <h1 class="text-3xl"><a href="/auth/login">Login</a> to comment</h1>
+                            <h1 class="text-2xl mb-1"><a href="/auth/login" class="text-ctp-blue">Login</a> to comment</h1>
                         </div>
                     {/if}
                 </div>
