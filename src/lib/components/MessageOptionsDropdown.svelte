@@ -14,7 +14,7 @@
     let content = post.content;
     let authorId = post.authorId._id;
 
-    console.log(post);
+    console.log("msg dropdown", post);
 
     let reported = false;
     let deleted = false;
@@ -30,16 +30,24 @@
     }
 
     async function report() {
+        let body = {
+            content,
+            authorId,
+            type: isComment ? "comment" : "post",
+        }
+
+        if (isComment) {
+            body.commentId = post._id;
+        } else {
+            body.postId = post._id;
+        }
+
         const res = await fetch("/api/v1/reports", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-                postId: link.split("/").pop(),
-                content,
-                authorId,
-            }),
+            body: JSON.stringify(body),
         });
 
         if (res.ok || res.status === 409) {
@@ -50,7 +58,7 @@
     }
 
     async function _delete(id) {
-        const res = await fetch(`/api/v1/posts/${id}`, {
+        const res = await fetch(isComment ? `/api/v1/comments/${id}` : `/api/v1/posts/${id}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -102,31 +110,31 @@
 
     {#if open}
         <div class="absolute mt-1 bg-ctp-mantle rounded-md p-2">
-            <button
-                class="unique"
-                on:click={() => navigator.clipboard.writeText(link)}
-            >
-                <Copy size={24} class="my-auto" />
-                <span class="ml-1 text-lg">Copy link</span>
-            </button>
-
-            <hr class="my-1 border-ctp-surface1" />
-
-            {#if state.user && state.user.staff}
+            {#if !isComment}
                 <button
                     class="unique"
-                    on:click={() => (post.pinned ? unpin() : pin())}
-                > 
-                    <Pin size={24} class="my-auto" />
-                    <span class="ml-1 text-lg mb-0.5">
-                        {post.pinned ? "Unpin" : "Pin"}
-                    </span>
+                    on:click={() => navigator.clipboard.writeText(link)}
+                >
+                    <Copy size={24} class="my-auto" />
+                    <span class="ml-1 text-lg">Copy link</span>
                 </button>
+
+                <hr class="my-1 border-ctp-surface1" />
+
+                {#if state.user && state.user.staff}
+                    <button
+                        class="unique"
+                        on:click={() => (post.pinned ? unpin() : pin())}
+                    > 
+                        <Pin size={24} class="my-auto" />
+                        <span class="ml-1 text-lg mb-0.5">
+                            {post.pinned ? "Unpin" : "Pin"}
+                        </span>
+                    </button>
+                {/if}
             {/if}
 
             {#if state.user && (state.user._id === authorId || state.user.staff)}
-                
-
                 <button
                     class={`unique  ${deleted ? "text-ctp-green" : "text-ctp-red"}`}
                     on:click={() => _delete(link.split("/").pop())}

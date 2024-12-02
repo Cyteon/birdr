@@ -43,23 +43,31 @@ export async function DELETE({ request }) {
 }
 
 export async function POST({ request }) {
-  const { content, postId, authorId } = await request.json();
+  const { content, postId, commentId, authorId, type } = await request.json();
 
   const user = await verifyRequest(request);
   let reporterId = user?._id;
 
-  const existingReport = await Report.findOne({ postId, reporterId, content });
+  const existingReport = await Report.findOne({ postId, reporterId, content, type });
 
   if (existingReport) {
     return Response.json({ message: "Already reported" }, { status: 409 });
   }
 
-  const report = new Report({
+  let data = {
     content,
-    postId,
     postAuthorId: authorId,
     reporterId,
-  });
+    type,
+  }
+
+  if (postId) {
+    data.postId = postId;
+  } else if (commentId) {
+    data.commentId = commentId;
+  }
+
+  const report = new Report(data);
 
   await report.save();
 

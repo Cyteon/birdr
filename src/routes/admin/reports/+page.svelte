@@ -74,8 +74,8 @@
         }
     }
 
-    async function _delete(postId, reportId) {
-        let res = await fetch(`/api/v1/posts/${postId}`, {
+    async function _delete(reportId, postId=null, commentId = null) { 
+        let res = await fetch(postId ? `/api/v1/posts/${postId}` : `/api/v1/comments/${commentId}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -157,7 +157,7 @@
                 <div class="flex flex-wrap mt-2 space-x-2">
                     <button
                         class="unique bg-ctp-red"
-                        on:click={() => _delete(report.postId, report._id)}
+                        on:click={() => _delete(report._id, report.postId, report.commentId)}
                     >
                         <Trash class="my-auto" />
                         <span class="ml-1 text-lg">Delete</span>

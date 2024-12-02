@@ -182,6 +182,10 @@
                                         >
                                     {/if}
                                 </span>
+                                <MessageOptionsDropdown
+                                    post={comment}
+                                    isComment={true}
+                                />
                             </div>
                             <p class="text-lg prose break-words">
                                 {@html parsePost(comment, false)}

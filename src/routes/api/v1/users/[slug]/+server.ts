@@ -33,7 +33,7 @@ export async function GET({ params, request }) {
   const followerCount = await Follow.countDocuments({ following: user._id });
   let isFollowing = false;
 
-  if (request.headers.get("Authorization") ||  request.headers.get("cookie")) {
+  if (request.headers.get("Authorization") || request.headers.get("cookie")) {
     let me = await verifyRequest(request);
 
     if (me) {
