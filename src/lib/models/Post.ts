@@ -19,6 +19,7 @@ export interface PostType {
   postedAt: Date;
   mentions: Map<string, mongoose.Types.ObjectId>;
   ogData?: Map<string, ogData>;
+  pinned?: boolean;
 }
 
 export const postSchema = new mongoose.Schema<PostType>({
@@ -44,6 +45,7 @@ export const postSchema = new mongoose.Schema<PostType>({
     },
     default: {},
   },
+  pinned: { type: Boolean, default: false },
 });
 
 export default mongoose.models.Post || mongoose.model("Post", postSchema);

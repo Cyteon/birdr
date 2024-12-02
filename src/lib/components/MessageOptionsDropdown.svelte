@@ -1,12 +1,16 @@
 <script lang="ts">
-    import { Ellipsis, Flag, Copy, Trash } from "lucide-svelte";
+    import { Ellipsis, Flag, Copy, Trash, Pin } from "lucide-svelte";
     import { state } from "$lib/state.svelte";
     import { getCookie } from "typescript-cookie";
     import { browser } from "$app/environment";
 
-    export let link = "";
-    export let content = "";
-    export let authorId = "";
+    export let post;
+    export let link = `${
+        window.location.origin
+    }/@${post.authorId.username}/${post._id}`
+
+    export let content = post.content;
+    export let authorId = post.authorId._id;
 
     let reported = false;
     let deleted = false;
@@ -54,6 +58,34 @@
             deleted = true;
         }
     }
+
+    async function pin() {
+        const res = await fetch(`/api/v1/posts/${link.split("/").pop()}/pinned`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${getCookie("token")}`,
+            },
+        });
+
+        if (res.ok) {
+            post.pinned = true;
+        }
+    }
+
+    async function unpin() {
+        const res = await fetch(`/api/v1/posts/${link.split("/").pop()}/pinned`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${getCookie("token")}`,
+            },
+        });
+
+        if (res.ok) {
+            post.pinned = false;
+        }
+    }
 </script>
 
 <div class="ml-2 my-auto text-ctp-subtext1" id={unqiueId}>
@@ -77,6 +109,16 @@
             <hr class="my-1 border-ctp-surface1" />
 
             {#if state.user && (state.user._id === authorId || state.user.staff)}
+                <button
+                    class="unique"
+                    on:click={() => (post.pinned ? unpin() : pin())}
+                > 
+                    <Pin size={24} class="my-auto" />
+                    <span class="ml-1 text-lg mb-0.5">
+                        {post.pinned ? "Unpin" : "Pin"}
+                    </span>
+                </button>
+
                 <button
                     class={`unique  ${deleted ? "text-ctp-green" : "text-ctp-red"}`}
                     on:click={() => _delete(link.split("/").pop())}

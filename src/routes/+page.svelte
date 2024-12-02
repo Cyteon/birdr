@@ -1,6 +1,6 @@
 <script lang="ts">
     import SideBar from "$lib/components/SideBar.svelte";
-    import { Send, MessageSquare } from "lucide-svelte";
+    import { Send, MessageSquare, Pin } from "lucide-svelte";
     import { browser } from "$app/environment";
     import { getCookie } from "typescript-cookie";
     import { onMount } from "svelte";
@@ -169,55 +169,61 @@
             {/if}
 
             {#each posts as post}
-                <div class="py-3 px-3 border-b border-b-ctp-surface0 flex" id={post._id}>
-                    <img
-                        src={post.authorId.avatarUrl}
-                        alt={post.authorId.username}
-                        class="w-14 h-14 rounded-full object-cover"
-                    />
-                    <div class="ml-2 w-full">
-                        <p class="flex">
-                            <a
-                                class="text-2xl font-bold leading-none"
-                                href={`/@${post.authorId.username}`}
-                            >
-                                {post.authorId.displayName}
-                            </a>
-                            <Badges user={post.authorId} small={true} />
-                            <span
-                                class="text-ctp-subtext0 ml-1 mt-[5px] leading-none my-auto"
-                            >
-                                @{post.authorId.username}
-                            </span>
-
-                            <span class="ml-auto flex">
-                                {#if !phone}
-                                    <span class="text-ctp-subtext1"
-                                        >{createTimeString(post.postedAt)}</span
-                                    >
-                                {/if}
-
-                                <MessageOptionsDropdown
-                                    link={`${
-                                        window.location.origin
-                                    }/@${post.authorId.username}/${post._id}`}
-                                    content={post.content}
-                                    authorId={post.authorId._id}
-                                />
-                            </span>
+                <div class="py-3 px-3 border-b border-b-ctp-surface0" id={post._id}>
+                    {#if post.pinned}
+                        <p class="text-lg flex mb-2 text-ctp-subtext1">
+                            <Pin size={24} class="my-auto" />
+                            <span class="ml-1">Pinned by staff</span>
                         </p>
-                        <p class="text-lg prose">
-                            {@html parsePost(
-                                post,
-                                true,
-                                `/@${post.authorId.username}/${post._id}`,
-                            )}
-                        </p>
-                        <div class="flex mt-2">
-                            <a href={`/@${post.authorId.username}/${post._id}`} class="flex">
-                                <MessageSquare size={24} class="my-auto" />
-                                <span class="ml-1 mb-1">{post.commentCount}</span>
-                            </a>
+                    {/if}
+                    <div class="flex">
+                        <img
+                            src={post.authorId.avatarUrl}
+                            alt={post.authorId.username}
+                            class="w-14 h-14 rounded-full object-cover"
+                        />
+                        <div class="ml-2 w-full">
+                            <p class="flex">
+                                <a
+                                    class="text-2xl font-bold leading-none"
+                                    href={`/@${post.authorId.username}`}
+                                >
+                                    {post.authorId.displayName}
+                                </a>
+                                <Badges user={post.authorId} small={true} />
+                                <span
+                                    class="text-ctp-subtext0 ml-1 mt-[5px] leading-none my-auto"
+                                >
+                                    @{post.authorId.username}
+                                </span>
+
+                                <span class="ml-auto flex">
+                                    {#if !phone}
+                                        <span class="text-ctp-subtext1"
+                                            >{createTimeString(post.postedAt)}</span
+                                        >
+                                    {/if}
+
+                                    <MessageOptionsDropdown
+                                        content={post.content}
+                                        authorId={post.authorId._id}
+                                        post={post}
+                                    />
+                                </span>
+                            </p>
+                            <p class="text-lg prose">
+                                {@html parsePost(
+                                    post,
+                                    true,
+                                    `/@${post.authorId.username}/${post._id}`,
+                                )}
+                            </p>
+                            <div class="flex mt-2">
+                                <a href={`/@${post.authorId.username}/${post._id}`} class="flex">
+                                    <MessageSquare size={24} class="my-auto" />
+                                    <span class="ml-1 mb-1">{post.commentCount}</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>

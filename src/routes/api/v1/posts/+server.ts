@@ -74,6 +74,7 @@ export async function GET({ url }) {
       "username displayName avatarUrl staff verified otherBadges",
     )
     .populate("mentions", "displayName")
+    .sort({ pinned: -1 })
     .sort({ postedAt: timeSort })
     .skip(offset)
     .limit(20)
