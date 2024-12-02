@@ -108,7 +108,7 @@
 
             <hr class="my-1 border-ctp-surface1" />
 
-            {#if state.user && (state.user._id === authorId || state.user.staff)}
+            {#if state.user && state.user.staff}
                 <button
                     class="unique"
                     on:click={() => (post.pinned ? unpin() : pin())}
@@ -118,6 +118,10 @@
                         {post.pinned ? "Unpin" : "Pin"}
                     </span>
                 </button>
+            {/if}
+
+            {#if state.user && (state.user._id === authorId || state.user.staff)}
+                
 
                 <button
                     class={`unique  ${deleted ? "text-ctp-green" : "text-ctp-red"}`}
