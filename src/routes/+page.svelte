@@ -181,27 +181,29 @@
                 </div>
             {/if}
 
-            <div class="border-b-2 border-b-ctp-surface0 py-2 px-2 w-full flex">
-                <button 
-                    class={`unique tabButton ${tab === "explore" ? "bg-ctp-crust/50" : ""}`}
-                    onclick={() => {
-                        tab = "explore";
-                        newSort(sorting);
-                    }}
-                >
-                    Explore
-                </button>
+            {#if state.user}
+                <div class="border-b-2 border-b-ctp-surface0 py-2 px-2 w-full flex">
+                    <button 
+                        class={`unique tabButton ${tab === "explore" ? "bg-ctp-crust/50" : ""}`}
+                        onclick={() => {
+                            tab = "explore";
+                            newSort(sorting);
+                        }}
+                    >
+                        Explore
+                    </button>
 
-                <button 
-                    class={`unique tabButton ${state.user ? "" : "hidden"} ${tab === "following" ? "bg-ctp-crust/50" : ""}`}
-                    onclick={() => {
-                        tab = "following";
-                        newSort(sorting);
-                    }}
-                >
-                    Following
-                </button>
-            </div>
+                    <button 
+                        class={`unique tabButton ${tab === "following" ? "bg-ctp-crust/50" : ""}`}
+                        onclick={() => {
+                            tab = "following";
+                            newSort(sorting);
+                        }}
+                    >
+                        Following
+                    </button>
+                </div>
+            {/if}
 
             {#each posts as post}
                 <div class="p-3 border-b border-b-ctp-surface0" id={post._id}>
