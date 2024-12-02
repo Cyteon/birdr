@@ -37,6 +37,7 @@
     "open-graph-scraper": "^6.8.2",
     "picomatch": "^4.0.2",
     "prettier": "^3.4.1",
+    "sharp": "^0.33.5",
     "typeid-ts": "^0.3.8",
     "typescript-cookie": "^1.0.6"
   }

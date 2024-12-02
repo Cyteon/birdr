@@ -4,6 +4,7 @@ import { verifyRequest } from "$lib/server/verifyRequest.server";
 import s3 from "$lib/server/s3.server";
 import { PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { S3_ENDPOINT } from "$env/static/private";
+import sharp from "sharp";
 
 export async function GET({ request }) {
   let user = await verifyRequest(request);
@@ -99,6 +100,11 @@ export async function PATCH({ request }) {
       avatar.replace(/^data:image\/\w+;base64,/, ""),
       "base64",
     );
+  
+    let img = await sharp(buf)
+    let { width, height } = await img.metadata();
+    let size = Math.min(width, height);
+    buf = await img.toBuffer();
 
     let key = `avatars/${user._id}.png`;
 
