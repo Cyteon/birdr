@@ -244,7 +244,6 @@
                                     {/if}
 
                                     <MessageOptionsDropdown
-                                        content={post.content}
                                         authorId={post.authorId._id}
                                         post={post}
                                     />

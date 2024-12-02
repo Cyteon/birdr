@@ -87,11 +87,7 @@
                                     {/if}
 
                                     <MessageOptionsDropdown
-                                        link={`${
-                                            window.location.origin
-                                        }/@${post.authorId.username}/${post._id}`}
-                                        content={post.content}
-                                        authorId={post.authorId._id}
+                                        post={post}
                                     />
                                 </span>
                             </p>
