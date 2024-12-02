@@ -41,8 +41,14 @@
         const observer = new IntersectionObserver(
             async (entries) => {
                 if (entries[0].isIntersecting) {
+                    let params = `?sort=${sorting}&offset=${posts.length}`;
+
+                    if (tab === "following") {
+                        params += "&following=true";
+                    }
+
                     const res = await fetch(
-                        `/api/v1/posts?sort=${sorting}&offset=${posts.length}`,
+                        `/api/v1/posts${params}`,
                         {
                             headers: {
                                 "Content-Type": "application/json",
@@ -262,7 +268,13 @@
 
             {#if noMorePosts}
                 <div class="pb-2 pt-4 flex">
-                    <p class="text-ctp-subtext1 mx-auto text-2xl">No more posts to show</p>
+                    <p class="text-ctp-subtext1 mx-auto text-2xl">
+                        {#if tab == "following" && posts.length == 0}
+                            No posts from anyone you are following, try following more people
+                        {:else}
+                            No more posts to show
+                        {/if}
+                    </p>
                 </div>
             {/if}
 
