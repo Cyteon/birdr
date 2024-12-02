@@ -24,6 +24,7 @@ export async function DELETE({ request, params }) {
   }
 
   await Post.findByIdAndDelete(postId);
+  await Comment.deleteMany({ postId });
 
   return Response.json({ message: "Success" });
 }
@@ -32,7 +33,7 @@ export async function GET({ params }) {
   let postId = params.slug;
 
   let post = await Post.findById(postId)
-    .populate("authorId", "username displayName avatarUrl staff verified")
+    .populate("authorId", "username displayName avatarUrl staff verified otherBadges")
     .populate("mentions", "displayName");
 
   if (!post) {
@@ -40,7 +41,7 @@ export async function GET({ params }) {
   }
 
   let comments = await Comment.find({ postId })
-    .populate("authorId", "username displayName avatarUrl staff verified")
+    .populate("authorId", "username displayName avatarUrl staff verified otherBadges")
     .populate("mentions", "displayName")
     .sort({ postedAt: -1 })
     .exec();

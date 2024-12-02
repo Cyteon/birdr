@@ -125,7 +125,7 @@
                             <UserOptionsDropdown {user} />
                         </div>
 
-                        {#if user._id != _state.user._id}
+                        {#if user._id != _state.user?._id}
                             <button class={`unique py-1 px-2 rounded-md mt-auto ${user.isFollowing ? "bg-ctp-surface1 text-ctp-subtext1" : "bg-ctp-blue text-ctp-crust"}`} onclick={follow}>
                                 {user.isFollowing ? "Unfollow" : "Follow"}
                             </button>

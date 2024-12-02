@@ -1,5 +1,6 @@
 import User from "$lib/models/User";
 import Post from "$lib/models/Post";
+import Comment from "$lib/models/Comment";
 import { verifyRequest } from "$lib/server/verifyRequest.server";
 
 export async function POST({ request, params }) {
@@ -23,6 +24,7 @@ export async function POST({ request, params }) {
   }
 
   await Post.deleteMany({ authorId: target._id });
+  await Comment.deleteMany({ authorId: target._id });
 
   return Response.json({ message: "Success" });
 }

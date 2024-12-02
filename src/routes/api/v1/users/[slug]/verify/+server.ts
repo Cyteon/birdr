@@ -2,6 +2,8 @@ import User from "$lib/models/User";
 import { verifyRequest } from "$lib/server/verifyRequest.server";
 
 export async function POST({ request, params }) {
+  // ⚠️ Restricted Endpoint ⚠️ (unless you're the post author)
+
   let user = await verifyRequest(request);
 
   if (!user) {
@@ -27,6 +29,8 @@ export async function POST({ request, params }) {
 }
 
 export async function DELETE({ request, params }) {
+  // ⚠️ Restricted Endpoint ⚠️ (unless you're the post author)
+
   let user = await verifyRequest(request);
 
   if (!user) {
