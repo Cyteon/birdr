@@ -171,7 +171,7 @@
             {#each posts as post}
                 <div class="py-3 px-3 border-b border-b-ctp-surface0" id={post._id}>
                     {#if post.pinned}
-                        <p class="text-lg flex mb-2 text-ctp-subtext1">
+                        <p class="text-lg flex mb-3 text-ctp-subtext1">
                             <Pin size={24} class="my-auto" />
                             <span class="ml-1">Pinned by staff</span>
                         </p>
