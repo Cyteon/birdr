@@ -10,9 +10,9 @@ button:not(.unique) {
   @apply bg-ctp-blue text-ctp-crust px-3 py-1 rounded-lg;
 }
 
-img:not(.badge) {
-  max-width: 80%;
-  max-height: 500px;
+img {
+  max-width: 500px !important;
+  max-height: 500px !important;
 }
 
 video {
