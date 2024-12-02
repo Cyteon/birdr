@@ -12,6 +12,8 @@
     export let content = post.content;
     export let authorId = post.authorId._id;
 
+    console.log(post);
+
     let reported = false;
     let deleted = false;
     let open = false;

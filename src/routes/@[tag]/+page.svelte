@@ -168,11 +168,10 @@
                                 {/if}
 
                                 <MessageOptionsDropdown
-                                    link={`${
-                                        window.location.origin
-                                    }/@${user.username}/${post._id}`}
-                                    content={post.content}
-                                    authorId={user._id}
+                                    post={{
+                                        ...post,
+                                        authorId: user,
+                                    }}
                                 />
                             </span>
                         </div>

@@ -107,9 +107,7 @@
                                 {/if}
 
                                 <MessageOptionsDropdown
-                                    link={window.location.href}
-                                    content={post.content}
-                                    authorId={post.authorId._id}
+                                    post={post}
                                 />
                             </span>
                         </div>
