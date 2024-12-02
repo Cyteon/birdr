@@ -36,7 +36,7 @@ export async function GET({ params, request }) {
   if (request.headers.get("Authorization") ||  request.headers.get("cookie")) {
     let me = await verifyRequest(request);
 
-    if (user) {
+    if (me) {
       let following = await Follow.findOne({
         user: me._id,
         following: user._id,

@@ -5,12 +5,14 @@
     import { browser } from "$app/environment";
 
     export let post;
-    export let link = `${
+    export let isComment = false;
+
+    let link = `${
         window.location.origin
     }/@${post.authorId.username}/${post._id}`
 
-    export let content = post.content;
-    export let authorId = post.authorId._id;
+    let content = post.content;
+    let authorId = post.authorId._id;
 
     console.log(post);
 
