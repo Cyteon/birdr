@@ -2,7 +2,7 @@ import { marked } from "marked";
 import DOMPurify from "dompurify";
 
 export function parsePost(post, clip = true, url = "") {
-  let text = post.content;
+  let text = DOMPurify.sanitize(post.content, { html: false })
 
   if (text.split("\n").length > 5 && clip) {
     text = text.split("\n").slice(0, 5).join("\n");
