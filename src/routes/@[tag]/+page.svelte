@@ -79,11 +79,13 @@
         >
             <div class="border-b-4 border-b-ctp-surface0 pb-3 px-3">
                 <div class="flex w-full">
-                    <img
-                        src={user.avatarUrl}
-                        alt={user.username}
-                        class="w-16 h-16 rounded-full object-cover"
-                    />
+                    <div>
+                        <img
+                            src={user.avatarUrl}
+                            alt={user.username}
+                            class="w-16 h-16 rounded-full object-cover"
+                        />
+                    </div> 
                     <div class="ml-2">
                         <h1 class="text-3xl font-bold leading-none flex">
                             {user.displayName}
@@ -140,11 +142,13 @@
 
             {#each user.posts as post}
                 <div class="px-3 py-4 border-b border-b-ctp-surface0 flex">
-                    <img
-                        src={user.avatarUrl}
-                        alt={user.username}
-                        class="w-14 h-14 rounded-full object-cover"
-                    />
+                    <div>
+                        <img
+                            src={user.avatarUrl}
+                            alt={user.username}
+                            class="w-14 h-14 rounded-full object-cover"
+                        />
+                    </div>
                     <div class="ml-2 w-full">
                         <div class="flex w-full">
                             <h1 class="text-2xl font-bold leading-none flex">

@@ -81,11 +81,13 @@
                 class={`m-3 border border-ctp-surface0 rounded-md ${phone ? "w-full mx-2" : "w-3/5 mx-auto"}`}
             >
                 <div class="px-3 py-4 border-b border-b-ctp-surface0 flex">
-                    <img
-                        src={post.authorId.avatarUrl}
-                        alt={post.authorId.username}
-                        class="w-14 h-14 rounded-full object-cover"
-                    />
+                    <div>
+                        <img
+                            src={post.authorId.avatarUrl}
+                            alt={post.authorId.username}
+                            class="w-14 h-14 rounded-full object-cover"
+                        />
+                    </div>
                     <div class="ml-2 w-full">
                         <div class="flex w-full">
                             <a class="text-2xl font-bold leading-none" href={`/@${post.authorId.username}`}>
@@ -157,11 +159,13 @@
 
                 {#each post.comments as comment}
                     <div class="px-3 py-4 border-b border-b-ctp-surface0 flex">
-                        <img
-                            src={comment.authorId.avatarUrl}
-                            alt={comment.authorId.username}
-                            class="w-14 h-14 rounded-full object-cover"
-                        />
+                        <div>
+                            <img
+                                src={comment.authorId.avatarUrl}
+                                alt={comment.authorId.username}
+                                class="w-14 h-14 rounded-full object-cover"
+                            />
+                        </div>
                         <div class="ml-2 w-full">
                             <div class="flex w-full">
                                 <a class="text-2xl font-bold leading-none" href={`/@${comment.authorId.username}`}>
