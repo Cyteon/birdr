@@ -77,19 +77,19 @@ export async function GET({ request, url }) {
     const user = await verifyRequest(request);
 
     if (user) {
+      const blockedIds = await Relation.find({ userId: user._id, relation: 2 }).select("targetId").lean();
+  
+      filter.authorId = { $nin: blockedIds.map((b) => b.targetId) };
+
       if (following) {
         if (!user) {
           return Response.json({ message: "Unauthorized" }, { status: 401 });
         }
     
-        const followingIds = await Relation.find({ userId: user._id, relation: 1 }).select("targetId");
+        const followingIds = await Relation.find({ userId: user._id, relation: 1 }).select("targetId").lean();
     
-        filter.authorId = { $in: followingIds.map((f) => f.targetId) };
+        filter.authorId = { ...filter.authorId, $in: followingIds.map((f) => f.targetId) };
       }
-  
-      const blockedIds = await Relation.find({ userId: user._id, relation: 2 }).select("targetId");
-  
-      filter.authorId = { $nin: blockedIds.map((b) => b.targetId) };
     }
   }
 
@@ -103,7 +103,7 @@ export async function GET({ request, url }) {
     .sort({ postedAt: timeSort })
     .skip(offset)
     .limit(limit)
-    .exec();
+    .lean();
 
   const commentCounts = await Comment.aggregate([
     { $group: { _id: "$postId", count: { $sum: 1 } } },
@@ -111,11 +111,10 @@ export async function GET({ request, url }) {
 
   return Response.json(
     posts.map((post) => {
-      let postObj = post.toJSON();
-      postObj.commentCount =
+      post.commentCount =
         commentCounts.find((c) => c._id.toString() === post._id.toString())
           ?.count || 0;
-      return postObj;
+      return post;
     }),
   );
 }

@@ -34,7 +34,8 @@ export async function GET({ params }) {
 
   let post = await Post.findById(postId)
     .populate("authorId", "username displayName avatarUrl staff verified otherBadges")
-    .populate("mentions", "displayName");
+    .populate("mentions", "displayName")
+    .lean();
 
   if (!post) {
     return Response.json({ message: "Post not found" }, { status: 404 });
@@ -44,7 +45,7 @@ export async function GET({ params }) {
     .populate("authorId", "username displayName avatarUrl staff verified otherBadges")
     .populate("mentions", "displayName")
     .sort({ postedAt: -1 })
-    .exec();
+    .lean();
 
   if (!comments) {
     comments = [];
@@ -52,6 +53,6 @@ export async function GET({ params }) {
 
   return Response.json({
     comments,
-    ...post.toJSON(),
+    ...post
   });
 }
