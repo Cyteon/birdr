@@ -5,7 +5,7 @@
 - [x] User authentication
 - [x] Posting
 - [x] Some user settings
-- [ ] Liking
+- [x] Liking
 - [x] Commenting
 - [x] Following
 
