@@ -58,11 +58,7 @@
         if (res.ok) {
             commentContent = "";
 
-            let newComment = await res.json();
-
-            newComment.authorId = _state.user;
-
-            post.comments = [newComment, ...post.comments];
+            window.location.reload();
         } else {
             commentingError = "An error occurred while commenting";
         }
