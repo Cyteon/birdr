@@ -66,7 +66,7 @@ export async function PUT({ request }) {
 }
 
 export async function GET({ request, url }) {
-  const timeSort = url.searchParams.get("sort") === "asc" ? 1 : -1;
+  const sort = url.searchParams.get("sort") || "desc";
   const offset = parseInt(url.searchParams.get("offset")) || 0;
   const limit = parseInt(url.searchParams.get("limit")) || 20;
 
@@ -104,6 +104,18 @@ export async function GET({ request, url }) {
     }
   }
 
+  let sort2 = {};
+
+  if (sort === "asc") {
+    sort2 = { postedAt: 1 };
+  } else if (sort === "desc") {
+    sort2 = { postedAt: -1 };
+  } else if (sort === "top") {
+    sort2 = {
+      likeDislikeDifference: -1,
+    };
+  }
+
   const posts = await Post.find(filter)
     .populate(
       "authorId",
@@ -111,7 +123,7 @@ export async function GET({ request, url }) {
     )
     .populate("mentions", "displayName")
     .sort({ pinned: -1 })
-    .sort({ postedAt: timeSort })
+    .sort(sort2)
     .skip(offset)
     .limit(limit)
     .lean();

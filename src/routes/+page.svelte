@@ -203,6 +203,7 @@
                             onchange={(event) => newSort(event.target.value)}
                         >
                             <option value="desc">Newest</option>
+                            <option value="top">Top</option>
                             <option value="asc">Oldest</option>
                         </select>
 

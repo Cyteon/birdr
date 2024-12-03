@@ -22,6 +22,7 @@ export interface PostType {
   pinned?: boolean;
   likeUserIds?: mongoose.Types.ObjectId[];
   dislikeUserIds?: mongoose.Types.ObjectId[];
+  likeDislikeDifference?: number;
 }
 
 export const postSchema = new mongoose.Schema<PostType>({
@@ -58,6 +59,13 @@ export const postSchema = new mongoose.Schema<PostType>({
     ref: "User",
     default: [],
   },
+  likeDislikeDifference: { type: Number, default: 0 },
+});
+
+postSchema.pre("save", function (next) {
+  this.likeDislikeDifference =
+    (this.likeUserIds?.length || 0) - (this.dislikeUserIds?.length || 0);
+  next();
 });
 
 export default mongoose.models.Post || mongoose.model("Post", postSchema);
