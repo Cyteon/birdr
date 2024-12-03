@@ -30,7 +30,7 @@ export function parsePost(post, clip = true, url = "") {
 
   const links = post.content.match(/https?:\/\/[^\s]+/g);
   const imageExtensions = ["jpg", "jpeg", "png", "gif", "webp", "svg"];
-  const videoExtensions = ["mp4", "webm"];
+  const videoExtensions = ["mp4", "webm", "mov"]
   let doneEmbeds = [];
   let embedded = 0;
 
