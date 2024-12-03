@@ -2,7 +2,7 @@ import { verifyRequest } from "$lib/server/verifyRequest.server";
 import Post from "$lib/models/Post";
 import User from "$lib/models/User";
 import Comment from "$lib/models/Comment";
-import Follow from "$lib/models/Follow";
+import Relation from "$lib/models/Relation";
 import ogs from "open-graph-scraper";
 
 async function getOGData(post) {
@@ -80,9 +80,9 @@ export async function GET({ request, url }) {
       return Response.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    const followingIds = await Follow.find({ user: user._id }).select("following");
+    const followingIds = await Relation.find({ userId: user._id, relation: 1 }).select("targetId");
 
-    filter.authorId = { $in: followingIds.map((f) => f.following) };
+    filter.authorId = { $in: followingIds.map((f) => f.targetId) };
   }
 
   const posts = await Post.find(filter)

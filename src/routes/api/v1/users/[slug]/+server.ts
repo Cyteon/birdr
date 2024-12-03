@@ -1,9 +1,9 @@
 import User from "$lib/models/User";
 import Post from "$lib/models/Post";
 import Comment from "$lib/models/Comment";
-import Follow from "$lib/models/Follow";
 import UsernameRedirect from "$lib/models/UsernameRedirect";
 import { verifyRequest } from "$lib/server/verifyRequest.server";
+import Relation from "$lib/models/Relation";
 
 export async function GET({ params, request }) {
   let username = params.slug;
@@ -29,17 +29,18 @@ export async function GET({ params, request }) {
     { $group: { _id: "$postId", count: { $sum: 1 } } },
   ]);
 
-  const followingCount = await Follow.countDocuments({ user: user._id });
-  const followerCount = await Follow.countDocuments({ following: user._id });
+  const followingCount = await Relation.countDocuments({ userId: user._id });
+  const followerCount = await Relation.countDocuments({ targetId: user._id, relation: 1 });
   let isFollowing = false;
 
   if (request.headers.get("Authorization") || request.headers.get("cookie")) {
     let me = await verifyRequest(request);
 
     if (me) {
-      let following = await Follow.findOne({
-        user: me._id,
-        following: user._id,
+      let following = await Relation.findOne({
+        userId: me._id,
+        targetId: user._id,
+        relation: 1,
       });
 
       if (following) {
