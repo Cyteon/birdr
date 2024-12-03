@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 export interface RelationType {
     userId: mongoose.Types.ObjectId;
     targetId: mongoose.Types.ObjectId;
-    relation: number;
+    relation: number; // 1: following, 2: blocked
 }
 
 export const RelationSchema = new mongoose.Schema<RelationType>({

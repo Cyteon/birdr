@@ -32,19 +32,21 @@ export async function GET({ params, request }) {
   const followingCount = await Relation.countDocuments({ userId: user._id });
   const followerCount = await Relation.countDocuments({ targetId: user._id, relation: 1 });
   let isFollowing = false;
+  let isBlocked = false;
 
   if (request.headers.get("Authorization") || request.headers.get("cookie")) {
     let me = await verifyRequest(request);
 
     if (me) {
-      let following = await Relation.findOne({
+      let relation = await Relation.findOne({
         userId: me._id,
         targetId: user._id,
-        relation: 1,
       });
 
-      if (following) {
+      if (relation && relation.relation === 1) {
         isFollowing = true;
+      } else if (relation && relation.relation === 2) {
+        isBlocked = true;
       }
     }
   }
@@ -61,6 +63,7 @@ export async function GET({ params, request }) {
     followingCount,
     followerCount,
     isFollowing,
+    isBlocked,
     posts: posts.map((post) => {
       let postObj = post.toJSON();
       postObj.commentCount =

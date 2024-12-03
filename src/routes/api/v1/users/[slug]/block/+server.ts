@@ -18,20 +18,20 @@ export async function PUT({ request, params }) {
     }
 
     if (target._id.equals(user._id)) {
-        return Response.json({ message: "Can't follow yourself" }, { status: 400 });
+        return Response.json({ message: "Can't block yourself" }, { status: 400 });
     }
 
     const relation = await Relation.findOne({ userId: user._id, targetId: target._id });
 
     if (relation) {
         if (relation.relation === 1) {
-            return Response.json({ message: "Already following" }, { status: 409 });
+            await Relation.findByIdAndDelete(relation._id);
         } else if (relation.relation === 2) {
-            return Response.json({ message: "Can't follow a blocked user" }, { status: 409 });
+            return Response.json({ message: "User already blocked" }, { status: 409 });
         }
     }
     
-    await new Relation({ userId: user._id, targetId: target._id, relation: 1 }).save();
+    await new Relation({ userId: user._id, targetId: target._id, relation: 2 }).save();
 
     return Response.json({ message: "Followed" });
 }
@@ -52,16 +52,16 @@ export async function DELETE({ request, params }) {
     }
 
     if (target._id.equals(user._id)) {
-        return Response.json({ message: "Can't unfollow yourself" }, { status: 400 });
+        return Response.json({ message: "Can't unblock yourself" }, { status: 400 });
     }
 
-    const following = await Relation.findOne({ userId: user._id, targetId: target._id, relation: 1 });
+    const relation = await Relation.findOne({ userId: user._id, targetId: target._id, relation: 2 });
 
-    if (!following) {
-        return Response.json({ message: "Not following" }, { status: 409 });
+    if (!relation) {
+        return Response.json({ message: "Not blocked" }, { status: 409 });
     }
 
-    await Relation.findByIdAndDelete(following._id);
+    await Relation.findByIdAndDelete(relation._id);
 
-    return Response.json({ message: "Unfollowed" });
+    return Response.json({ message: "Unblocked" });
 }

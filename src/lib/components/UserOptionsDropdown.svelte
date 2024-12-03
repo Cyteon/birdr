@@ -7,6 +7,7 @@
     export let user;
 
     let banned = false;
+    let blockClicked = false;
     let open = false;
     let showAddBadge = false;
     let badge = "";
@@ -107,9 +108,24 @@
             showAddBadge = false;
         }
     }
+
+    async function block(username: string) {
+        const res = await fetch(`/api/v1/users/${username}/block`, {
+            method: user.isBlocked ? "DELETE" : "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${getCookie("token")}`,
+            },
+        });
+
+        if (res.ok) {
+            blockClicked = true;
+            user.isBlocked = !user.isBlocked;
+        }
+    }
 </script>
 
-{#if state.user?.staff}
+{#if state.user}
     <div class="ml-2 my-auto text-ctp-subtext1" id={unqiueId}>
         <button
             class="open unique transition-all duration-300 hover:bg-ctp-crust/60 px-1 rounded-full"
@@ -120,14 +136,22 @@
 
         {#if open}
             <div class="absolute mt-1 bg-ctp-mantle rounded-md p-2">
-                {#if state.user && state.user.staff}
-                <button
-                    class="unique"
-                    on:click={() => showAddBadge = true}
+                <button 
+                    class={`unique ${blockClicked ? "text-ctp-green" : ""}`}
+                    on:click={() => (block(user.username))}
                 >
-                    <Badge size={24} class="my-auto" />
-                    <span class="ml-1 text-lg">Add Badge</span>
+                    <Ban size={24} class="my-auto" />
+                    <span class="ml-1 text-lg">{user.isBlocked ? "Unblock" : "Block"}</span>
                 </button>
+
+                {#if state.user.staff}
+                    <button
+                        class="unique"
+                        on:click={() => showAddBadge = true}
+                    >
+                        <Badge size={24} class="my-auto" />
+                        <span class="ml-1 text-lg">Add Badge</span>
+                    </button>
 
                     {#if user.verified}
                         <button

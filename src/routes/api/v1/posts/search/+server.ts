@@ -1,7 +1,9 @@
 import Post from "$lib/models/Post";
 import Comment from "$lib/models/Comment";
+import Relation from "$lib/models/Relation";
+import { verifyRequest } from "$lib/server/verifyRequest.server";
 
-export async function GET({ url }) {
+export async function GET({ request, url }) {
   let search = url.searchParams.get("q");
 
   if (!search) {
@@ -11,7 +13,17 @@ export async function GET({ url }) {
     );
   }
 
-  let posts = await Post.find({ content: { $regex: search, $options: "i" } })
+  let filter = { content: { $regex: search, $options: "i" } };
+
+  if (request.headers.get("Authorization") || request.headers.get("cookie")) {
+    const user = await verifyRequest(request);
+
+    const blockedIds = await Relation.find({ userId: user._id, relation: 2 }).select("targetId");
+    filter.authorId = { $nin: blockedIds.map((b) => b.targetId) };
+  }
+
+
+  let posts = await Post.find(filter)
     .populate("mentions", "displayName")
     .populate("authorId", "username displayName avatarUrl staff verified")
     .limit(50)

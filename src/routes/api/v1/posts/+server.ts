@@ -68,21 +68,27 @@ export async function PUT({ request }) {
 export async function GET({ request, url }) {
   const timeSort = url.searchParams.get("sort") === "asc" ? 1 : -1;
   const offset = parseInt(url.searchParams.get("offset")) || 0;
+  const limit = parseInt(url.searchParams.get("limit")) || 20;
 
   let filter = {}
 
-  const following = url.searchParams.get("following");
-
-  if (following) {
+  if (request.headers.get("Authorization") || request.headers.get("cookie")) {
+    const following = url.searchParams.get("following");
     const user = await verifyRequest(request);
 
-    if (!user) {
-      return Response.json({ message: "Unauthorized" }, { status: 401 });
+    if (following) {
+      if (!user) {
+        return Response.json({ message: "Unauthorized" }, { status: 401 });
+      }
+  
+      const followingIds = await Relation.find({ userId: user._id, relation: 1 }).select("targetId");
+  
+      filter.authorId = { $in: followingIds.map((f) => f.targetId) };
     }
 
-    const followingIds = await Relation.find({ userId: user._id, relation: 1 }).select("targetId");
+    const blockedIds = await Relation.find({ userId: user._id, relation: 2 }).select("targetId");
 
-    filter.authorId = { $in: followingIds.map((f) => f.targetId) };
+    filter.authorId = { $nin: blockedIds.map((b) => b.targetId) };
   }
 
   const posts = await Post.find(filter)
@@ -94,7 +100,7 @@ export async function GET({ request, url }) {
     .sort({ pinned: -1 })
     .sort({ postedAt: timeSort })
     .skip(offset)
-    .limit(20)
+    .limit(limit)
     .exec();
 
   const commentCounts = await Comment.aggregate([
