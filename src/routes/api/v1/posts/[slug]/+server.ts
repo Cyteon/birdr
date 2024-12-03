@@ -51,11 +51,13 @@ export async function GET({ params, request }) {
     let user = await verifyRequest(request);
 
     if (user) {
-      post.hasLiked = post.likeUserIds?.some((id) => id.equals(user._id)) || false;
-      post.hasDisliked = post.dislikeUserIds?.some((id) => id.equals(user._id)) || false;
+      post.hasLiked =
+        post.likeUserIds?.some((id) => id.equals(user._id)) || false;
+      post.hasDisliked =
+        post.dislikeUserIds?.some((id) => id.equals(user._id)) || false;
     }
   }
-        
+
   post.likeUserIds = undefined;
   post.dislikeUserIds = undefined;
 
