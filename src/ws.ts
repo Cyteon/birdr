@@ -1,10 +1,11 @@
+// TODO: FIX
+
 import { WebSocketServer } from "ws";
 import type { ViteDevServer } from "vite";
 import mongoose from "mongoose";
 import User from "./lib/models/User";
 import AuthToken from "./lib/models/AuthToken";
 import dotenv from "dotenv";
-import { error } from "@sveltejs/kit";
 
 dotenv.config();
 
@@ -110,7 +111,7 @@ export const configureServer = (server: ViteDevServer) => {
     });
   });
 
-  setInterval(() => {
+  let interval = setInterval(() => {
     clients = clients.map((client) => {
       client.untilNextHeartbeat -= 1000;
 
@@ -122,6 +123,10 @@ export const configureServer = (server: ViteDevServer) => {
       return client;
     });
   }, 1000);
+
+  result.on("close", () => {
+    clearInterval(interval);
+  });
 }
 
 const webSocketServer = {
