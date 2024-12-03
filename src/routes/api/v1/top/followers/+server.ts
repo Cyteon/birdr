@@ -1,13 +1,14 @@
 // Silly feature that prob wont be used
 
-import Follow from "$lib/models/Follow";
+import Relation from "$lib/models/Relation";
 import User from "$lib/models/User";
 
 export async function GET({ }) {
-    const topFollowed = await Follow.aggregate([
-        { $group: { _id: "$following", count: { $sum: 1 } } },
+    const topFollowed = await Relation.aggregate([
+        { $match: { relation: 1 } },
+        { $group: { _id: "$targetId", count: { $sum: 1 } } },
         { $sort: { count: -1 } },
-        { $limit: 50 },
+        { $limit: 10 },
     ]);
 
     return Response.json(
