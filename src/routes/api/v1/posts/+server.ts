@@ -76,19 +76,21 @@ export async function GET({ request, url }) {
     const following = url.searchParams.get("following");
     const user = await verifyRequest(request);
 
-    if (following) {
-      if (!user) {
-        return Response.json({ message: "Unauthorized" }, { status: 401 });
+    if (user) {
+      if (following) {
+        if (!user) {
+          return Response.json({ message: "Unauthorized" }, { status: 401 });
+        }
+    
+        const followingIds = await Relation.find({ userId: user._id, relation: 1 }).select("targetId");
+    
+        filter.authorId = { $in: followingIds.map((f) => f.targetId) };
       }
   
-      const followingIds = await Relation.find({ userId: user._id, relation: 1 }).select("targetId");
+      const blockedIds = await Relation.find({ userId: user._id, relation: 2 }).select("targetId");
   
-      filter.authorId = { $in: followingIds.map((f) => f.targetId) };
+      filter.authorId = { $nin: blockedIds.map((b) => b.targetId) };
     }
-
-    const blockedIds = await Relation.find({ userId: user._id, relation: 2 }).select("targetId");
-
-    filter.authorId = { $nin: blockedIds.map((b) => b.targetId) };
   }
 
   const posts = await Post.find(filter)
