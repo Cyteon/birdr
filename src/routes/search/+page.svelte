@@ -87,7 +87,7 @@
 <div class="flex min-h-screen w-full">
     <SideBar />
 
-    <div class={`my-5 ${phone ? "w-full mx-2" : "w-3/5 mx-auto"}`}>
+    <div class={`my-5 ${phone ? "w-full mx-1" : "w-3/5 mx-auto"}`}>
         <div class="flex">
             <input 
                 type="text"

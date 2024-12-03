@@ -18,13 +18,16 @@
     let sorting = "desc";
     let phone = false;
     let noMorePosts = false;
+    let screenW = 1280;
 
     if (browser) {
         window.addEventListener("resize", () => {
             phone = window.innerWidth < 768;
+            screenW = window.innerWidth;
         });
 
         phone = window.innerWidth < 768;
+        screenW = window.innerWidth;
     }
 
     let posts = [];
@@ -161,10 +164,10 @@
     }
 </script>
 
-<div class="flex min-h-screen w-full">
+<div class={`flex min-h-screen w-full`}>
     <SideBar />
 
-    <div class={`my-5 ${phone ? "w-full mx-2" : "w-3/5 mx-auto"}`}>
+    <div class={`my-5 ${phone ? "w-full px-1" : "w-3/5 mx-auto"}`}>
         <div class="flex">
             <input 
                 type="text"

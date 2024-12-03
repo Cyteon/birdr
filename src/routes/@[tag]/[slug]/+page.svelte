@@ -110,7 +110,7 @@
             </div>
         {:else if post}
             <div
-                class={`m-3 border border-ctp-surface0 rounded-md ${phone ? "w-full mx-2" : "w-3/5 mx-auto"}`}
+                class={`m-3 border border-ctp-surface0 rounded-md ${phone ? "w-full mx-1" : "w-3/5 mx-auto"}`}
             >
                 <div class="px-3 py-4 border-b border-b-ctp-surface0 flex">
                     <div>

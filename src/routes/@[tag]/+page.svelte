@@ -138,7 +138,7 @@
     <div class="flex min-h-screen w-full">
         <SideBar />
         <div
-            class={`my-5 py-3 border border-ctp-surface0 rounded-md ${phone ? "w-full mx-2" : "w-3/5 mx-auto"}`}
+            class={`my-5 py-3 border border-ctp-surface0 rounded-md ${phone ? "w-full mx-1" : "w-3/5 mx-auto"}`}
         >
             <div class="border-b-4 border-b-ctp-surface0 pb-3 px-3">
                 <div class="flex w-full">

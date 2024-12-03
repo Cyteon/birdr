@@ -49,28 +49,21 @@
 </script>
 
 <nav
-    class={`bg-ctp-mantle h-screen sticky top-0 border-r border-r-ctp-surface0 p-1 py-5 flex flex-col items-center transition-all duration-300 ${
+    class={`bg-ctp-mantle border-r border-r-ctp-surface0 p-1 flex items-center transition-all duration-300 ${
         expanded ? (phone ? "w-32" : "w-36") : "w-16"
-    }`}
+    } ${phone ? "flex w-full h-fit fixed inset-x-0 bottom-0 justify-center" : "flex-col h-screen sticky top-0 py-5"}`}
 >
-    <h1 class="text-xl font-bold">Birdr</h1>
+    {#if !phone}
+        <h1 class="text-xl font-bold">Birdr</h1>
+    {/if}
 
-    <div class="mt-3 flex flex-col items-center transition-all duration-300">
+    <div class={`flex ${phone ? "flex space-x-4" : "flex-col mt-3"} items-center transition-all duration-300`}>
         <a href="/" class={location === "/" ? "text-ctp-blue" : ""}>
             <Home size={32} class="my-auto" />
             <span class="ml-2 text-xl my-auto font-semibold" hidden={!expanded}
                 >Home</span
             >
         </a>
-
-        <!--- Not ready
-        <a href="/recent" class={location === "/recent" ? "text-ctp-blue" : ""}>
-            <Globe2 size={32} class="my-auto" />
-            <span class="ml-2 text-lg font-semibold" hidden={!expanded}
-                >Recent</span
-            >
-        </a>
-        --->
 
         {#if state.user}
             <a
@@ -134,12 +127,14 @@
         {/if}
     </div>
 
-    <button
-        class="unique mt-auto text-center transition-colors duration-500 hover:bg-ctp-crust p-1 rounded-md bg-ctp-mantle text-ctp-text"
-        on:click={() => (expanded = !expanded)}
-    >
-        <Menu size={32} />
-    </button>
+    {#if !phone}
+        <button
+            class="unique mt-auto text-center transition-colors duration-500 hover:bg-ctp-crust p-1 rounded-md bg-ctp-mantle text-ctp-text"
+            on:click={() => (expanded = !expanded)}
+        >
+            <Menu size={32} />
+        </button>
+    {/if}
 </nav>
 
 <style>
