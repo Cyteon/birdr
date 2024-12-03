@@ -58,7 +58,7 @@ export async function PUT({ request }) {
     }, {});
   }
 
-  let post = await Post.create({ content, authorId: user.id, mentions });
+  let post = await Post.create({ content, authorId: user._id, mentions });
 
   getOGData(post).catch(console.error);
 
