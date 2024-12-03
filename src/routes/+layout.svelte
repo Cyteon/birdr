@@ -4,6 +4,7 @@
 	import { onMount } from 'svelte';
 	import { getCookie } from 'typescript-cookie';
 	import { browser } from '$app/environment';
+	import cache from '$lib/cache';
 
 	let { children } = $props();
 
@@ -16,6 +17,13 @@
 	}
 
 	onMount(async () => {
+		let cached = await cache.me.get(1);
+		
+		if (cached) {
+			console.log("Loading user from cache");
+			state.user = cached;
+		}
+
 	    let token = getCookie('token');
 
 		if (token) {
@@ -27,8 +35,14 @@
           });
 
         if (res.ok) {
-          const data = await res.json();
-          state.user = data;
+          	const data = await res.json();
+          	state.user = data;
+
+			if (cached) {
+				cache.me.update(1, data);
+			} else {
+				cache.me.put(data);
+			}
         }
       }
 	});
