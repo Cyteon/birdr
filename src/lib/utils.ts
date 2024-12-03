@@ -17,7 +17,7 @@ export function parsePost(post, clip = true, url = "") {
 
   let mentions = text.match(/@(\w+)/g);
 
-  if (mentions) {
+  if (mentions && post.mentions) {
     for (let mention of mentions) {
       let mentionData = post.mentions[mention];
 

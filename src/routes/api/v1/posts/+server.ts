@@ -70,11 +70,12 @@ export async function GET({ request, url }) {
   const offset = parseInt(url.searchParams.get("offset")) || 0;
   const limit = parseInt(url.searchParams.get("limit")) || 20;
 
+  let user = null;
   let filter = {};
 
   if (request.headers.get("Authorization") || request.headers.get("cookie")) {
     const following = url.searchParams.get("following");
-    const user = await verifyRequest(request);
+    user = await verifyRequest(request);
 
     if (user) {
       const blockedIds = await Relation.find({ userId: user._id, relation: 2 })
@@ -124,6 +125,18 @@ export async function GET({ request, url }) {
       post.commentCount =
         commentCounts.find((c) => c._id.toString() === post._id.toString())
           ?.count || 0;
+      
+      post.likeCount = post.likeUserIds?.length || 0;
+      post.dislikeCount = post.dislikeUserIds?.length || 0;
+
+      if (user) {
+        post.hasLiked = post.likeUserIds?.some((id) => id.equals(user._id)) || false;
+        post.hasDisliked = post.dislikeUserIds?.some((id) => id.equals(user._id)) || false;
+      }
+
+      post.likeUserIds = undefined;
+      post.dislikeUserIds = undefined;
+      
       return post;
     }),
   );

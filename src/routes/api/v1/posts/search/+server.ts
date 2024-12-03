@@ -21,7 +21,7 @@ export async function GET({ request, url }) {
     const blockedIds = await Relation.find({
       userId: user._id,
       relation: 2,
-    }).select("targetId");
+    }).select("targetId").lean();
     filter.authorId = { $nin: blockedIds.map((b) => b.targetId) };
   }
 
@@ -29,7 +29,8 @@ export async function GET({ request, url }) {
     .populate("mentions", "displayName")
     .populate("authorId", "username displayName avatarUrl staff verified")
     .limit(50)
-    .sort({ postedAt: -1 });
+    .sort({ postedAt: -1 })
+    .lean();
 
   let commentCount = await Comment.aggregate([
     { $match: { postId: { $in: posts.map((p) => p._id) } } },
@@ -38,11 +39,19 @@ export async function GET({ request, url }) {
 
   return Response.json(
     posts.map((post) => {
-      let postObj = post.toJSON();
-      postObj.commentCount =
+      post.commentCount =
         commentCount.find((c) => c._id.toString() === post._id.toString())
           ?.count || 0;
-      return postObj;
+      
+      post.likeCount = post.likeUserIds?.length || 0;
+      post.dislikeCount = post.dislikeUserIds?.length || 0;
+      post.hasLiked = post.likeUserIds?.includes(user._id) || false;
+      post.hasDisliked = post.dislikeUserIds?.includes(user._id) || false;
+            
+      post.likeUserIds = undefined;
+      post.dislikeUserIds = undefined;
+      
+      return post;
     }),
   );
 }

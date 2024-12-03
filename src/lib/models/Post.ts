@@ -20,6 +20,8 @@ export interface PostType {
   mentions: Map<string, mongoose.Types.ObjectId>;
   ogData?: Map<string, ogData>;
   pinned?: boolean;
+  likeUserIds?: mongoose.Types.ObjectId[];
+  dislikeUserIds?: mongoose.Types.ObjectId[];
 }
 
 export const postSchema = new mongoose.Schema<PostType>({
@@ -46,6 +48,16 @@ export const postSchema = new mongoose.Schema<PostType>({
     default: {},
   },
   pinned: { type: Boolean, default: false },
+  likeUserIds: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "User",
+    default: [],
+  },
+  dislikeUserIds: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "User",
+    default: [],
+  },
 });
 
 export default mongoose.models.Post || mongoose.model("Post", postSchema);

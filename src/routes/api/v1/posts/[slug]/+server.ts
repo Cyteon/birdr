@@ -44,6 +44,14 @@ export async function GET({ params }) {
     return Response.json({ message: "Post not found" }, { status: 404 });
   }
 
+  post.likeCount = post.likeUserIds?.length || 0;
+  post.dislikeCount = post.dislikeUserIds?.length || 0;
+  post.hasLiked = post.likeUserIds?.includes(user._id) || false;
+  post.hasDisliked = post.dislikeUserIds?.includes(user._id) || false;
+        
+  post.likeUserIds = undefined;
+  post.dislikeUserIds = undefined;
+
   let comments = await Comment.find({ postId })
     .populate(
       "authorId",

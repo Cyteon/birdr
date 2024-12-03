@@ -74,6 +74,15 @@ export async function GET({ params, request }) {
       post.commentCount =
         commentCount.find((c) => c._id.toString() === post._id.toString())
           ?.count || 0;
+      
+      post.likeCount = post.likeUserIds?.length || 0;
+      post.dislikeCount = post.dislikeUserIds?.length || 0;
+      post.hasLiked = post.likeUserIds?.includes(user._id) || false;
+      post.hasDisliked = post.dislikeUserIds?.includes(user._id) || false;
+        
+      post.likeUserIds = undefined;
+      post.dislikeUserIds = undefined;
+
       return post;
     }),
   });

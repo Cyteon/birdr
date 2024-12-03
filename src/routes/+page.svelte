@@ -1,6 +1,6 @@
 <script lang="ts">
     import SideBar from "$lib/components/SideBar.svelte";
-    import { Send, MessageSquare, Pin } from "lucide-svelte";
+    import { Send, MessageSquare, Pin, ThumbsUp, ThumbsDown } from "lucide-svelte";
     import { browser } from "$app/environment";
     import { getCookie } from "typescript-cookie";
     import { onMount } from "svelte";
@@ -109,6 +109,54 @@
             let data = await res.json();
 
             postingError = data.message;
+        }
+    }
+
+    async function like(post) {
+        const res = await fetch(`/api/v1/posts/${post._id}/like`, {
+            method: post.hasLiked ? "DELETE" : "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${getCookie("token")}`,
+            },
+        });
+
+        if (res.ok) {
+            posts = posts.map((p) => {
+                if (p._id === post._id) {
+                    p.hasLiked = !p.hasLiked;
+                    p.likeCount += p.hasLiked ? 1 : -1;
+
+                    p.dislikeCount -= p.hasDisliked ? 1 : 0;
+                    p.hasDisliked = false;
+                }
+
+                return p;
+            });
+        }
+    }
+
+    async function dislike(post) {
+        const res = await fetch(`/api/v1/posts/${post._id}/dislike`, {
+            method: post.hasDisliked ? "DELETE" : "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${getCookie("token")}`,
+            },
+        });
+
+        if (res.ok) {
+            posts = posts.map((p) => {
+                if (p._id === post._id) {
+                    p.hasDisliked = !p.hasDisliked;
+                    p.dislikeCount += p.hasDisliked ? 1 : -1;
+
+                    p.likeCount -= p.hasLiked ? 1 : 0;
+                    p.hasLiked = false;
+                }
+
+                return p;
+            });
         }
     }
 </script>
@@ -251,9 +299,17 @@
                                     `/@${post.authorId.username}/${post._id}`,
                                 )}
                             </p>
-                            <div class="flex mt-2">
-                                <a href={`/@${post.authorId.username}/${post._id}`} class="flex">
-                                    <MessageSquare size={24} class="my-auto" />
+                            <div class="flex mt-3">
+                                <button class={`flex unique ${post.hasLiked ? "text-ctp-blue" : ""}`} onclick={() => like(post)}>
+                                    <ThumbsUp size={24} />
+                                    <span class="ml-1 mb-1">{post.likeCount}</span>
+                                </button>
+                                <button class={`flex unique ml-2 ${post.hasDisliked ? "text-ctp-blue" : ""}`} onclick={() => dislike(post)}>
+                                    <ThumbsDown size={24} />
+                                    <span class="ml-1 mb-1">{post.dislikeCount}</span>
+                                </button>
+                                <a href={`/@${post.authorId.username}/${post._id}`} class="flex ml-2">
+                                    <MessageSquare size={24} />
                                     <span class="ml-1 mb-1">{post.commentCount}</span>
                                 </a>
                             </div>
