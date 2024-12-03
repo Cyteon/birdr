@@ -6,7 +6,7 @@
     import MessageOptionsDropdown from "$lib/components/MessageOptionsDropdown.svelte";
     import Badges from "$lib/components/Badges.svelte";
     import { state as _state } from "$lib/state.svelte";
-    import { Send } from "lucide-svelte";
+    import { Send, ThumbsDown, ThumbsUp } from "lucide-svelte";
     import { getCookie } from "typescript-cookie";
 
     let { data } = $props();
@@ -63,6 +63,42 @@
             commentingError = "An error occurred while commenting";
         }
     }
+
+    async function like(post) {
+        const res = await fetch(`/api/v1/posts/${post._id}/like`, {
+            method: post.hasLiked ? "DELETE" : "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${getCookie("token")}`,
+            },
+        });
+
+        if (res.ok) {
+            post.hasLiked = !post.hasLiked;
+            post.likeCount += post.hasLiked ? 1 : -1;
+
+            post.dislikeCount -= post.hasDisliked ? 1 : 0;
+            post.hasDisliked = false;
+        }
+    }
+
+    async function dislike(post) {
+        const res = await fetch(`/api/v1/posts/${post._id}/dislike`, {
+            method: post.hasDisliked ? "DELETE" : "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${getCookie("token")}`,
+            },
+        });
+
+        if (res.ok) {
+            post.hasDisliked = !post.hasDisliked;
+            post.dislikeCount += post.hasDisliked ? 1 : -1;
+
+            post.likeCount -= post.hasLiked ? 1 : 0;
+            post.hasLiked = false;
+        }
+    }
 </script>
 
 <div class="flex min-h-screen w-full">
@@ -110,6 +146,16 @@
                         <p class="text-lg prose break-words">
                             {@html parsePost(post, false)}
                         </p>
+                        <div class="flex mt-3">
+                            <button class={`flex unique ${post.hasLiked ? "text-ctp-blue" : ""}`} onclick={() => like(post)}>
+                                <ThumbsUp size={24} />
+                                <span class="ml-1 mb-1">{post.likeCount}</span>
+                            </button>
+                            <button class={`flex unique ml-2 ${post.hasDisliked ? "text-ctp-blue" : ""}`} onclick={() => dislike(post)}>
+                                <ThumbsDown size={24} />
+                                <span class="ml-1 mb-1">{post.dislikeCount}</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
 

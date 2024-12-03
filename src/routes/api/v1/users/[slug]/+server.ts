@@ -40,8 +40,10 @@ export async function GET({ params, request }) {
   let isFollowing = false;
   let isBlocked = false;
 
+  let me = null;
+
   if (request.headers.get("Authorization") || request.headers.get("cookie")) {
-    let me = await verifyRequest(request);
+    me = await verifyRequest(request);
 
     if (me) {
       let relation = await Relation.findOne({
@@ -77,8 +79,11 @@ export async function GET({ params, request }) {
       
       post.likeCount = post.likeUserIds?.length || 0;
       post.dislikeCount = post.dislikeUserIds?.length || 0;
-      post.hasLiked = post.likeUserIds?.includes(user._id) || false;
-      post.hasDisliked = post.dislikeUserIds?.includes(user._id) || false;
+
+      if (me) {
+        post.hasLiked = post.likeUserIds?.some((id) => id.equals(me._id)) || false;
+        post.hasDisliked = post.dislikeUserIds?.some((id) => id.equals(me._id)) || false;
+      }
         
       post.likeUserIds = undefined;
       post.dislikeUserIds = undefined;

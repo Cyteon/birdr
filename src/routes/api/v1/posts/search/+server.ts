@@ -15,8 +15,10 @@ export async function GET({ request, url }) {
 
   let filter = { content: { $regex: search, $options: "i" } };
 
+  let user = null;
+
   if (request.headers.get("Authorization") || request.headers.get("cookie")) {
-    const user = await verifyRequest(request);
+    user = await verifyRequest(request);
 
     const blockedIds = await Relation.find({
       userId: user._id,
@@ -45,8 +47,11 @@ export async function GET({ request, url }) {
       
       post.likeCount = post.likeUserIds?.length || 0;
       post.dislikeCount = post.dislikeUserIds?.length || 0;
-      post.hasLiked = post.likeUserIds?.includes(user._id) || false;
-      post.hasDisliked = post.dislikeUserIds?.includes(user._id) || false;
+
+      if (user) {
+        post.hasLiked = post.likeUserIds?.some((id) => id.equals(user._id)) || false;
+        post.hasDisliked = post.dislikeUserIds?.some((id) => id.equals(user._id)) || false;
+      }
             
       post.likeUserIds = undefined;
       post.dislikeUserIds = undefined;

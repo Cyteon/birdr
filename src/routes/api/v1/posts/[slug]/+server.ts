@@ -29,7 +29,7 @@ export async function DELETE({ request, params }) {
   return Response.json({ message: "Success" });
 }
 
-export async function GET({ params }) {
+export async function GET({ params, request }) {
   let postId = params.slug;
 
   let post = await Post.findById(postId)
@@ -46,8 +46,15 @@ export async function GET({ params }) {
 
   post.likeCount = post.likeUserIds?.length || 0;
   post.dislikeCount = post.dislikeUserIds?.length || 0;
-  post.hasLiked = post.likeUserIds?.includes(user._id) || false;
-  post.hasDisliked = post.dislikeUserIds?.includes(user._id) || false;
+
+  if (request.headers.get("Authorization") || request.headers.get("cookie")) {
+    let user = await verifyRequest(request);
+
+    if (user) {
+      post.hasLiked = post.likeUserIds?.some((id) => id.equals(user._id)) || false;
+      post.hasDisliked = post.dislikeUserIds?.some((id) => id.equals(user._id)) || false;
+    }
+  }
         
   post.likeUserIds = undefined;
   post.dislikeUserIds = undefined;
