@@ -2,7 +2,9 @@ import { marked } from "marked";
 import DOMPurify from "dompurify";
 
 export function parsePost(post, clip = true, url = "") {
-  let text = DOMPurify.sanitize(post.content, { USE_PROFILES: { html: false } })
+  let text = DOMPurify.sanitize(post.content, {
+    USE_PROFILES: { html: false },
+  });
 
   if (text.split("\n").length > 5 && clip) {
     text = text.split("\n").slice(0, 5).join("\n");
@@ -30,7 +32,7 @@ export function parsePost(post, clip = true, url = "") {
 
   const links = post.content.match(/https?:\/\/[^\s]+/g);
   const imageExtensions = ["jpg", "jpeg", "png", "gif", "webp", "svg"];
-  const videoExtensions = ["mp4", "webm", "mov"]
+  const videoExtensions = ["mp4", "webm", "mov"];
   let doneEmbeds = [];
   let embedded = 0;
 

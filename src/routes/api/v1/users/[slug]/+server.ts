@@ -8,7 +8,7 @@ import Relation from "$lib/models/Relation";
 export async function GET({ params, request }) {
   let username = params.slug;
 
-  let user = await User.findOne({ username }).lean(); 
+  let user = await User.findOne({ username }).lean();
 
   if (!user) {
     let redir = await UsernameRedirect.findOne({ from: username });
@@ -30,8 +30,13 @@ export async function GET({ params, request }) {
     { $group: { _id: "$postId", count: { $sum: 1 } } },
   ]);
 
-  const followingCount = await Relation.countDocuments({ userId: user._id }).lean();
-  const followerCount = await Relation.countDocuments({ targetId: user._id, relation: 1 }).lean();
+  const followingCount = await Relation.countDocuments({
+    userId: user._id,
+  }).lean();
+  const followerCount = await Relation.countDocuments({
+    targetId: user._id,
+    relation: 1,
+  }).lean();
   let isFollowing = false;
   let isBlocked = false;
 

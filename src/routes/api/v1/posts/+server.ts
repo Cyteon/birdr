@@ -70,25 +70,35 @@ export async function GET({ request, url }) {
   const offset = parseInt(url.searchParams.get("offset")) || 0;
   const limit = parseInt(url.searchParams.get("limit")) || 20;
 
-  let filter = {}
+  let filter = {};
 
   if (request.headers.get("Authorization") || request.headers.get("cookie")) {
     const following = url.searchParams.get("following");
     const user = await verifyRequest(request);
 
     if (user) {
-      const blockedIds = await Relation.find({ userId: user._id, relation: 2 }).select("targetId").lean();
-  
+      const blockedIds = await Relation.find({ userId: user._id, relation: 2 })
+        .select("targetId")
+        .lean();
+
       filter.authorId = { $nin: blockedIds.map((b) => b.targetId) };
 
       if (following) {
         if (!user) {
           return Response.json({ message: "Unauthorized" }, { status: 401 });
         }
-    
-        const followingIds = await Relation.find({ userId: user._id, relation: 1 }).select("targetId").lean();
-    
-        filter.authorId = { ...filter.authorId, $in: followingIds.map((f) => f.targetId) };
+
+        const followingIds = await Relation.find({
+          userId: user._id,
+          relation: 1,
+        })
+          .select("targetId")
+          .lean();
+
+        filter.authorId = {
+          ...filter.authorId,
+          $in: followingIds.map((f) => f.targetId),
+        };
       }
     }
   }

@@ -33,7 +33,10 @@ export async function GET({ params }) {
   let postId = params.slug;
 
   let post = await Post.findById(postId)
-    .populate("authorId", "username displayName avatarUrl staff verified otherBadges")
+    .populate(
+      "authorId",
+      "username displayName avatarUrl staff verified otherBadges",
+    )
     .populate("mentions", "displayName")
     .lean();
 
@@ -42,7 +45,10 @@ export async function GET({ params }) {
   }
 
   let comments = await Comment.find({ postId })
-    .populate("authorId", "username displayName avatarUrl staff verified otherBadges")
+    .populate(
+      "authorId",
+      "username displayName avatarUrl staff verified otherBadges",
+    )
     .populate("mentions", "displayName")
     .sort({ postedAt: -1 })
     .lean();
@@ -53,6 +59,6 @@ export async function GET({ params }) {
 
   return Response.json({
     comments,
-    ...post
+    ...post,
   });
 }

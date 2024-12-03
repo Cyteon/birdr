@@ -12,7 +12,9 @@ export async function verifyRequest(request) {
     return null;
   }
 
-  const authToken = await AuthToken.findOne({ token }).populate("userId").lean();
+  const authToken = await AuthToken.findOne({ token })
+    .populate("userId")
+    .lean();
   if (!authToken || !authToken.userId || authToken.userId.banned) {
     return null;
   }

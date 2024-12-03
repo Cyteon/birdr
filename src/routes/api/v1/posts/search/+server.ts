@@ -18,10 +18,12 @@ export async function GET({ request, url }) {
   if (request.headers.get("Authorization") || request.headers.get("cookie")) {
     const user = await verifyRequest(request);
 
-    const blockedIds = await Relation.find({ userId: user._id, relation: 2 }).select("targetId");
+    const blockedIds = await Relation.find({
+      userId: user._id,
+      relation: 2,
+    }).select("targetId");
     filter.authorId = { $nin: blockedIds.map((b) => b.targetId) };
   }
-
 
   let posts = await Post.find(filter)
     .populate("mentions", "displayName")

@@ -100,8 +100,8 @@ export async function PATCH({ request }) {
       avatar.replace(/^data:image\/\w+;base64,/, ""),
       "base64",
     );
-  
-    let img = await sharp(buf)
+
+    let img = await sharp(buf);
     let { width, height } = await img.metadata();
     let size = Math.min(width, height);
     buf = await img.toBuffer();

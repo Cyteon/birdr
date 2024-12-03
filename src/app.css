@@ -10,12 +10,14 @@ button:not(.unique) {
   @apply bg-ctp-blue text-ctp-crust px-3 py-1 rounded-lg;
 }
 
-.post-image, .post-video {
+.post-image,
+.post-video {
   width: 100%;
-  height: auto
+  height: auto;
 }
 
-img, video {
+img,
+video {
   max-width: 500px;
   max-height: 500px;
 }

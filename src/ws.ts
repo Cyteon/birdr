@@ -43,7 +43,7 @@ export const configureServer = (server: ViteDevServer) => {
       result.emit("connection", ws, req);
     });
   });
-    
+
   result.on("connection", (socket, request) => {
     let verified = false;
 
@@ -53,14 +53,18 @@ export const configureServer = (server: ViteDevServer) => {
           const { token } = JSON.parse(data.toString());
 
           if (!token) {
-            socket.send(JSON.stringify({ error: "No token provided", status: 400 }));
+            socket.send(
+              JSON.stringify({ error: "No token provided", status: 400 }),
+            );
             socket.close();
             return;
           } else {
             const tokenResult = await AuthToken.findOne({ token });
 
             if (!tokenResult) {
-              socket.send(JSON.stringify({ error: "Invalid token", status: 401 }));
+              socket.send(
+                JSON.stringify({ error: "Invalid token", status: 401 }),
+              );
               socket.close();
               return;
             }
@@ -68,7 +72,9 @@ export const configureServer = (server: ViteDevServer) => {
             const user = await User.findById(tokenResult.userId);
 
             if (!user) {
-              socket.send(JSON.stringify({ error: "Invalid token", status: 401 }));
+              socket.send(
+                JSON.stringify({ error: "Invalid token", status: 401 }),
+              );
               socket.close();
               return;
             }
@@ -101,8 +107,11 @@ export const configureServer = (server: ViteDevServer) => {
           if (op === OPCode.HEARTBEAT) {
             socket.send(JSON.stringify({ op: OPCode.HEARTBEAT_ACK }));
 
-            const clientIndex = clients.findIndex((client) => client.socket === socket);
-            clients[clientIndex].untilNextHeartbeat = clients[clientIndex].heartbeatInterval;
+            const clientIndex = clients.findIndex(
+              (client) => client.socket === socket,
+            );
+            clients[clientIndex].untilNextHeartbeat =
+              clients[clientIndex].heartbeatInterval;
           }
         } catch (e) {
           console.error(e);
@@ -116,7 +125,9 @@ export const configureServer = (server: ViteDevServer) => {
       client.untilNextHeartbeat -= 1000;
 
       if (client.untilNextHeartbeat + 10000 <= 0) {
-        client.socket.send(JSON.stringify({ error: "Heartbeat timeout", status: 400 }));
+        client.socket.send(
+          JSON.stringify({ error: "Heartbeat timeout", status: 400 }),
+        );
         client.socket.close();
       }
 
@@ -127,11 +138,11 @@ export const configureServer = (server: ViteDevServer) => {
   result.on("close", () => {
     clearInterval(interval);
   });
-}
+};
 
 const webSocketServer = {
-    name: "webSocketServer",
-    configureServer,
-}
+  name: "webSocketServer",
+  configureServer,
+};
 
 export default webSocketServer;

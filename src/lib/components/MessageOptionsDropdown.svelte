@@ -14,8 +14,6 @@
     let content = post.content;
     let authorId = post.authorId._id;
 
-    console.log("msg dropdown", post);
-
     let reported = false;
     let deleted = false;
     let open = false;

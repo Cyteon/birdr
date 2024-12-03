@@ -48,7 +48,12 @@ export async function POST({ request }) {
   const user = await verifyRequest(request);
   let reporterId = user?._id;
 
-  const existingReport = await Report.findOne({ postId, reporterId, content, type });
+  const existingReport = await Report.findOne({
+    postId,
+    reporterId,
+    content,
+    type,
+  });
 
   if (existingReport) {
     return Response.json({ message: "Already reported" }, { status: 409 });
@@ -59,7 +64,7 @@ export async function POST({ request }) {
     postAuthorId: authorId,
     reporterId,
     type,
-  }
+  };
 
   if (postId) {
     data.postId = postId;
