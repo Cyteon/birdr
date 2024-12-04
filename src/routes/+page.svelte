@@ -33,10 +33,13 @@
     let posts = [];
 
     onMount(async () => {
+        let headers = {
+            "Content-Type": "application/json",
+        };
+
+
         const res = await fetch("/api/v1/posts", {
-            headers: {
-                "Content-Type": "application/json",
-            },
+            headers,
         });
 
         posts = await res.json();
@@ -50,12 +53,18 @@
                         params += "&following=true";
                     }
 
+                    let headers = {
+                        "Content-Type": "application/json",
+                    };
+
+                    if (getCookie("token")) {
+                        headers["Authorization"] = `Bearer ${getCookie("token")}`;
+                    }
+
                     const res = await fetch(
                         `/api/v1/posts${params}`,
                         {
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
+                            headers
                         },
                     );
 
@@ -85,11 +94,15 @@
             params += "&following=true";
         }
 
-        const res = await fetch(`/api/v1/posts${params}`, {
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
+        let headers = {
+            "Content-Type": "application/json",
+        };
+
+        if (getCookie("token")) {
+            headers["Authorization"] = `Bearer ${getCookie("token")}`;
+        }
+
+        const res = await fetch(`/api/v1/posts${params}`, {headers});
 
         posts = await res.json();
     }
