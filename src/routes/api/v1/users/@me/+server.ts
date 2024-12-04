@@ -19,7 +19,7 @@ export async function GET({ request }) {
 }
 
 export async function PATCH({ request }) {
-  let user = await verifyRequest(request);
+  let user = await verifyRequest(request,  true);
 
   if (!user) {
     return Response.json({ message: "Unauthorized" }, { status: 401 });
