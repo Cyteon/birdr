@@ -276,7 +276,7 @@
                                 <ThumbsDown size={24} />
                                 <span class="ml-1 mb-1">{post.dislikeCount}</span>
                             </button>
-                            <a href={`/@${post.authorId.username}/${post._id}`} class="flex ml-2">
+                            <a href={`/@${user.username}/${post._id}`} class="flex ml-2">
                                 <MessageSquare size={24} />
                                 <span class="ml-1 mb-1">{post.commentCount}</span>
                             </a>
