@@ -15,7 +15,7 @@ export async function verifyRequest(request, hydrate = false) {
   const authToken = await AuthToken.findOne({ token })
     .populate("userId")
     .lean();
-  
+
   if (!authToken || !authToken.userId || authToken.userId.banned) {
     return null;
   }
