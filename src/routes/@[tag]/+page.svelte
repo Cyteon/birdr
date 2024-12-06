@@ -3,7 +3,7 @@
     import SideBar from "$lib/components/SideBar.svelte";
     import { browser } from "$app/environment";
     import { state as _state } from "$lib/state.svelte";
-    import { Send, MessageSquare, ThumbsUp, ThumbsDown } from "lucide-svelte";
+    import { Send, MessageSquare, ThumbsUp, ThumbsDown, PenTool } from "lucide-svelte";
     import { getCookie } from "typescript-cookie";
     import { createTimeString, parsePost } from "$lib/utils";
     import MessageOptionsDropdown from "$lib/components/MessageOptionsDropdown.svelte";
@@ -157,6 +157,11 @@
                         <p class="text-xl text-ctp-subtext0">
                             @{user.username}
                         </p>
+
+                        <p class="text-lg my-1 flex">
+                            {user.bio}
+                        </p>
+
                         <div class="flex w-full">
                             <p class="text-xl">
                                 <span class="font-semibold">{user.followingCount}</span> Following

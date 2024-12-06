@@ -63,6 +63,7 @@ export async function GET({ params, request }) {
     _id: user._id,
     username: user.username,
     displayName: user.displayName,
+    bio: user.bio,
     avatarUrl: user.avatarUrl,
     banned: user.banned,
     otherBadges: user.otherBadges,

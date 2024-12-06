@@ -25,7 +25,7 @@ export async function PATCH({ request }) {
     return Response.json({ message: "Unauthorized" }, { status: 401 });
   }
 
-  let { displayName, username, avatar } = await request.json();
+  let { displayName, username, avatar, bio } = await request.json();
 
   if (displayName) {
     if (displayName.length > 30) {
@@ -36,6 +36,14 @@ export async function PATCH({ request }) {
     }
 
     user.displayName = displayName;
+  }
+
+  if (bio) {
+    if (bio.length > 160) {
+      return Response.json({ message: "Bio too long" }, { status: 400 });
+    }
+
+    user.bio = bio;
   }
 
   if (username) {

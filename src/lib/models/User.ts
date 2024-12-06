@@ -5,6 +5,7 @@ export interface UserType {
   password: String | null;
   username: String;
   displayName: String;
+  bio?: String;
   staff: Boolean;
   verified: Boolean;
   otherBadges: String[];
@@ -22,6 +23,7 @@ export const userSchema = new mongoose.Schema<UserType>({
     trim: true,
   },
   displayName: { type: String, required: false },
+  bio: { type: String, default: "" },
   staff: { type: Boolean, default: false },
   verified: { type: Boolean, default: false },
   otherBadges: { type: [String], default: [] },

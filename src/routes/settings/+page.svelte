@@ -6,6 +6,7 @@
 
     let displayName = "";
     let username = "";
+    let bio = "";
     let userInfoError = "";
     let userInfoSuccess = "";
 
@@ -48,6 +49,15 @@
             }
 
             body.username = username;
+        }
+
+        if (bio !== "") {
+            if (bio.length > 160) {
+                userInfoError = "Bio must be less than 160 characters!";
+                return;
+            }
+
+            body.bio = bio;
         }
 
         if (avatar) {
@@ -114,6 +124,14 @@
                     }}
                     bind:value={username}
                 />
+
+                <h1 class="text-xl font-semibold mt-3">Bio</h1>
+                <textarea
+                    class="unique2 bg-ctp-mantle mt-2 text-lg p-2 rounded-lg outline-none "
+                    placeholder={state.user?.bio as string}
+                    bind:value={bio}
+                ></textarea>
+
 
                 <!-- avatar upload -->
 
