@@ -154,11 +154,11 @@
                             {user.displayName}
                             <Badges {user} />
                         </h1>
-                        <p class="text-xl text-ctp-subtext0">
+                        <p class="text-xl text-ctp-subtext0 w-fit">
                             @{user.username}
                         </p>
 
-                        <p class="text-lg my-1 flex">
+                        <p class="text-lg my-1 max-w-[80%] break-words">
                             {user.bio}
                         </p>
 
@@ -265,7 +265,7 @@
                                 />
                             </span>
                         </div>
-                        <p class="text-lg prose">
+                        <p class="text-lg prose break-words">
                             {@html parsePost(
                                 post,
                                 true,

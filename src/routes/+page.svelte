@@ -309,7 +309,7 @@
                                     />
                                 </span>
                             </p>
-                            <p class="text-lg prose">
+                            <p class="text-lg prose break-words">
                                 {@html parsePost(
                                     post,
                                     true,

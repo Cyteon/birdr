@@ -1,10 +1,15 @@
 import { marked } from "marked";
 import DOMPurify from "dompurify";
 
+const imageExtensions = ["jpg", "jpeg", "png", "gif", "webp", "svg"];
+const videoExtensions = ["mp4", "webm", "mov"];
+
 export function parsePost(post, clip = true, url = "") {
   let text = DOMPurify.sanitize(post.content, {
     USE_PROFILES: { html: false },
   });
+
+  const rawImageData = post.content.match(/data:image\/\w+;base64,[^=]+={1,3}/g);
 
   if (text.split("\n").length > 5 && clip) {
     text = text.split("\n").slice(0, 5).join("\n");
@@ -12,7 +17,13 @@ export function parsePost(post, clip = true, url = "") {
   }
 
   if (text.length > 500 && clip) {
-    text = text.slice(0, 500) + ` ... <a href="${url}">Read more</a>`;
+    if (rawImageData) {
+      let lastImage = rawImageData[rawImageData.length - 1];
+      text = text.slice(0, text.indexOf(lastImage) + lastImage.length) + ` ... <a href="${url}">Read more</a>`;
+    } else {
+      text = text.slice(0, 500) + ` ... <a href="${url}">Read more</a>`;
+
+    }
   }
 
   let mentions = text.match(/@(\w+)/g);
@@ -31,8 +42,7 @@ export function parsePost(post, clip = true, url = "") {
   }
 
   const links = post.content.match(/https?:\/\/[^\s]+/g);
-  const imageExtensions = ["jpg", "jpeg", "png", "gif", "webp", "svg"];
-  const videoExtensions = ["mp4", "webm", "mov"];
+
   let doneEmbeds = [];
   let embedded = 0;
 
@@ -85,6 +95,16 @@ export function parsePost(post, clip = true, url = "") {
       }
 
       embedded++;
+    }
+  }
+
+
+  if (rawImageData) {
+    for (let data of rawImageData) {
+      text = text.replace(
+        data,
+        `<img src="${data}" alt="Image" class="post-image" />`,
+      );
     }
   }
 
