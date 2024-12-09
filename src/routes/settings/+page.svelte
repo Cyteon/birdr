@@ -66,6 +66,11 @@
                 return;
             }
 
+            if (!avatar.type.startsWith("image/")) {
+                userInfoError = "Avatar must be an image!";
+                return;
+            }
+
             const base64 = await new Promise<string>((resolve) => {
                 const reader = new FileReader();
 

@@ -104,6 +104,13 @@ export async function PATCH({ request }) {
       );
     }
 
+    if (!avatar.startsWith("data:image/")) {
+      return Response.json(
+        { message: "Invalid image format" },
+        { status: 400 },
+      );
+    }
+
     var buf = Buffer.from(
       avatar.replace(/^data:image\/\w+;base64,/, ""),
       "base64",
