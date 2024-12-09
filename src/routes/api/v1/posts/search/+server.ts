@@ -20,13 +20,16 @@ export async function GET({ request, url }) {
   if (request.headers.get("Authorization") || request.headers.get("cookie")) {
     user = await verifyRequest(request);
 
-    const blockedIds = await Relation.find({
-      userId: user._id,
-      relation: 2,
-    })
-      .select("targetId")
-      .lean();
-    filter.authorId = { $nin: blockedIds.map((b) => b.targetId) };
+    if (user) {
+      const blockedIds = await Relation.find({
+        userId: user._id,
+        relation: 2,
+      })
+        .select("targetId")
+        .lean();
+      
+      filter.authorId = { $nin: blockedIds.map((b) => b.targetId) };
+    }
   }
 
   let posts = await Post.find(filter)
