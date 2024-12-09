@@ -2,11 +2,11 @@
     import {
         Menu,
         Home,
-        Globe2,
         Cog,
         KeyRound,
         LogOut,
         Shield,
+        User,
     } from "lucide-svelte";
     import { browser } from "$app/environment";
     import { state } from "$lib/state.svelte";
@@ -122,6 +122,16 @@
                 <Shield size={32} class="my-auto" />
                 <span class="ml-2 text-xl font-semibold" hidden={!expanded}
                     >Reports</span
+                >
+            </a>
+
+            <a
+                href="/admin/users"
+                class={location === "/admin/users" ? "text-ctp-blue" : ""}
+            >
+                <User size={32} class="my-auto" />
+                <span class="ml-2 text-xl font-semibold" hidden={!expanded}
+                    >Users</span
                 >
             </a>
         {/if}

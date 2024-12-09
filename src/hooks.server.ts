@@ -12,7 +12,7 @@ await mongoose.connect(MONGODB_URI);
 const limiters = {
   "/api/v1/auth/register": {
     limiter: new RetryAfterRateLimiter({
-      IP: [5, "2h"],
+      IP: [[3, "2h"], [6, "d"]],
     }),
     methods: ["POST"],
   },
