@@ -23,8 +23,7 @@ export async function GET({ params, request }) {
   let posts = await Post.find({ authorId: user._id })
     .populate("mentions", "displayName")
     .limit(50)
-    .sort({ postedAt: -1 })
-    .lean();
+    .sort({ postedAt: -1 });
 
   let commentCount = await Comment.aggregate([
     { $group: { _id: "$postId", count: { $sum: 1 } } },
@@ -33,10 +32,12 @@ export async function GET({ params, request }) {
   const followingCount = await Relation.countDocuments({
     userId: user._id,
   }).lean();
+
   const followerCount = await Relation.countDocuments({
     targetId: user._id,
     relation: 1,
   }).lean();
+
   let isFollowing = false;
   let isBlocked = false;
 
@@ -74,6 +75,8 @@ export async function GET({ params, request }) {
     isFollowing,
     isBlocked,
     posts: posts.map((post) => {
+      post = post._doc;
+
       post.commentCount =
         commentCount.find((c) => c._id.toString() === post._id.toString())
           ?.count || 0;

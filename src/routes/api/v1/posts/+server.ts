@@ -57,7 +57,7 @@ export async function PUT({ request }) {
       return acc;
     }, {});
   }
-
+  
   let post = await Post.create({ content, authorId: user._id, mentions });
 
   getOGData(post).catch(console.error);
@@ -125,15 +125,16 @@ export async function GET({ request, url }) {
     .sort({ pinned: -1 })
     .sort(sort2)
     .skip(offset)
-    .limit(limit)
-    .lean();
-
+    .limit(limit);
+  
   const commentCounts = await Comment.aggregate([
     { $group: { _id: "$postId", count: { $sum: 1 } } },
   ]);
 
   return Response.json(
     posts.map((post) => {
+      post = post._doc;
+
       post.commentCount =
         commentCounts.find((c) => c._id.toString() === post._id.toString())
           ?.count || 0;

@@ -37,8 +37,9 @@ export async function GET({ params, request }) {
       "authorId",
       "username displayName avatarUrl staff verified otherBadges",
     )
-    .populate("mentions", "displayName")
-    .lean();
+    .populate("mentions", "displayName");
+  
+  post = post._doc;
 
   if (!post) {
     return Response.json({ message: "Post not found" }, { status: 404 });
@@ -67,8 +68,7 @@ export async function GET({ params, request }) {
       "username displayName avatarUrl staff verified otherBadges",
     )
     .populate("mentions", "displayName")
-    .sort({ postedAt: -1 })
-    .lean();
+    .sort({ postedAt: -1 });
 
   if (!comments) {
     comments = [];
