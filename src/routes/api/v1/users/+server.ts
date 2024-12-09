@@ -19,11 +19,17 @@ export async function GET({ request }) {
 
     users = await Promise.all(
         users.map(async (user) => {
-            user.postCount = await Post.countDocuments({ authorId: user._id });
-            user.commentCount = await Comment.countDocuments({ authorId: user._id });
-            user.followingCount = await Relation.countDocuments({ userId: user._id });
-            user.followerCount = await Relation.countDocuments({ targetId: user._id, relation: 1 });
+            const [postCount, commentCount, followingCount, followerCount] = await Promise.all([
+                Post.countDocuments({ authorId: user._id }),
+                Comment.countDocuments({ authorId: user._id }),
+                Relation.countDocuments({ userId: user._id }),
+                Relation.countDocuments({ targetId: user._id, relation: 1 })
+            ]);
 
+            user.postCount = postCount;
+            user.commentCount = commentCount;
+            user.followingCount = followingCount;
+            user.followerCount = followerCount;
             user.password = undefined;
 
             return user;
