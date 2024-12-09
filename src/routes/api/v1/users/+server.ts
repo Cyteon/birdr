@@ -6,7 +6,7 @@ import { verifyRequest } from "$lib/server/verifyRequest.server";
 
 export async function GET({ request }) {
     const user = await verifyRequest(request);
-    
+
     if (!user) {
         return Response.json({ message: "Unauthorized" }, { status: 401 });
     }
@@ -15,28 +15,38 @@ export async function GET({ request }) {
         return Response.json({ message: "Forbidden" }, { status: 403 });
     }
 
-    let users = await User.find().lean();
+    let users = await User.find({}, { password: 0 }).lean(); 
 
-    users = await Promise.all(
-        users.map(async (user) => {
-            const [postCount, commentCount, followingCount, followerCount] = await Promise.all([
-                Post.countDocuments({ authorId: user._id }),
-                Comment.countDocuments({ authorId: user._id }),
-                Relation.countDocuments({ userId: user._id }),
-                Relation.countDocuments({ targetId: user._id, relation: 1 })
-            ]);
+    const postCounts = await Post.aggregate([
+        { $group: { _id: "$authorId", count: { $sum: 1 } } }
+    ]);
 
-            user.postCount = postCount;
-            user.commentCount = commentCount;
-            user.followingCount = followingCount;
-            user.followerCount = followerCount;
-            user.password = undefined;
+    const commentCounts = await Comment.aggregate([
+        { $group: { _id: "$authorId", count: { $sum: 1 } } }
+    ]);
 
-            return user;
-        })
-    );
+    const followingCounts = await Relation.aggregate([
+        { $group: { _id: "$userId", count: { $sum: 1 } } }
+    ]);
 
-    return Response.json(
-       users
-    );
+    const followerCounts = await Relation.aggregate([
+        { $group: { _id: "$targetId", count: { $sum: 1 } } }
+    ]);
+
+    users = users.map((user) => {
+        const postCount = postCounts.find((post) => post._id.toString() === user._id.toString())?.count || 0;
+        const commentCount = commentCounts.find((comment) => comment._id.toString() === user._id.toString())?.count || 0;
+        const followingCount = followingCounts.find((follow) => follow._id.toString() === user._id.toString())?.count || 0;
+        const followerCount = followerCounts.find((follow) => follow._id.toString() === user._id.toString())?.count || 0;
+
+        return {
+            ...user,
+            postCount,
+            commentCount,
+            followingCount,
+            followerCount
+        };
+    });
+
+    return Response.json(users);
 }
