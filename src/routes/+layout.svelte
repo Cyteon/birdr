@@ -2,7 +2,7 @@
 	import '../app.css';
 	import { state } from '$lib/state.svelte';
 	import { onMount } from 'svelte';
-	import { getCookie } from 'typescript-cookie';
+	import { getCookie, removeCookie } from 'typescript-cookie';
 	import { browser } from '$app/environment';
 	import cache from '$lib/cache';
 
@@ -34,17 +34,22 @@
             },
           });
 
-        if (res.ok) {
-          	const data = await res.json();
-          	state.user = data;
+			if (res.ok) {
+				const data = await res.json();
+				state.user = data;
 
-			if (cached) {
-				cache.me.update(1, data);
+				if (cached) {
+					cache.me.update(1, data);
+				} else {
+					cache.me.put(data);
+				}
 			} else {
-				cache.me.put(data);
+				cache.me.delete(1);
+				removeCookie('token');
 			}
-        }
-      }
+		} else {
+			cache.me.delete(1);
+		}
 	});
 </script>
 
