@@ -134,15 +134,15 @@
                     <div class="ml-auto flex">
                         <div class="my-auto">
                             <h1 class="text-2xl font-bold text-right">
-                                {report.reporterId.displayName}
+                                {report.reporterId?.displayName || "Not Found"}
                             </h1>
                             <p class="text-ctp-subtext1 text-lg text-right">
-                                @{report.reporterId.username}
+                                @{report.reporterId?.username || "Not Found"}
                             </p>
                         </div>
 
                         <img
-                            src={report.reporterId.avatarUrl}
+                            src={report.reporterId?.avatarUrl}
                             alt="avatar"
                             class="ml-2 w-16 h-16 rounded-full"
                         />
