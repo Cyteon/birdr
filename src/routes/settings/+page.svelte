@@ -169,6 +169,10 @@
                     Update
                 </button>
             </div>
+            <div class="mr-2 mb-2">
+                <h1 class="text-xl font-semibold mb-4">Delete</h1>
+                <a href="/settings/delete" class="text-xl py-2 px-4 rounded-md text-ctp-crust bg-ctp-red">Delete Account</a>
+            </div>
             <div>
                 <h1 class="text-xl font-semibold">Theme</h1>
                 <div class="flex flex-col">

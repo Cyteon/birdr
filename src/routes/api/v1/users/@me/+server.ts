@@ -1,5 +1,8 @@
 import User from "$lib/models/User";
 import UsernameRedirect from "$lib/models/UsernameRedirect";
+import Relation from "$lib/models/Relation";
+import Post from "$lib/models/Post";
+import Comment from "$lib/models/Comment";
 import { verifyRequest } from "$lib/server/verifyRequest.server";
 import s3 from "$lib/server/s3.server";
 import { PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
@@ -149,4 +152,27 @@ export async function PATCH({ request }) {
   user.password = undefined;
 
   return Response.json(user);
+}
+
+export async function DELETE({ request }) {
+  let user = await verifyRequest(request, true);
+
+  if (!user) {
+    return Response.json({ message: "Unauthorized" }, { status: 401 });
+  }
+
+  await User.findByIdAndDelete(user._id);
+  await UsernameRedirect.deleteMany({ to: user.username });
+  await Relation.deleteMany({ $or: [{ userId: user._id }, { targetId: user._id }] });
+  await Post.deleteMany({ authorId: user._id });
+  await Comment.deleteMany({ authorId: user._id });
+
+  await s3.send(
+    new DeleteObjectCommand({
+      Bucket: "data",
+      Key: `avatars/${user._id}.png`,
+    }),
+  );
+
+  return Response.json({ message: "User deleted" });
 }
