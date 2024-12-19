@@ -30,6 +30,7 @@
         const res = await fetch(`/api/v1/users/${data.tag}`, {
             headers: {
                 "Content-Type": "application/json",
+                Authorization: `Bearer ${getCookie("token")}`,
             },
         });
 
@@ -149,7 +150,7 @@
                             class="w-16 h-16 rounded-full object-cover"
                         />
                     </div> 
-                    <div class="ml-2">
+                    <div class="ml-2 max-w-[80%] flex-grow">
                         <h1 class="text-3xl font-bold leading-none flex">
                             {user.displayName}
                             <Badges {user} />
@@ -158,7 +159,7 @@
                             @{user.username}
                         </p>
 
-                        <p class="text-lg my-1 max-w-[80%] break-words">
+                        <p class="text-lg my-1 break-words">
                             {user.bio}
                         </p>
 

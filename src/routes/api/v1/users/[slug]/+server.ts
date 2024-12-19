@@ -38,8 +38,8 @@ export async function GET({ params, request }) {
     relation: 1,
   }).lean();
 
-  let isFollowing = false;
-  let isBlocked = false;
+  let isFollowing = undefined;
+  let isBlocked = undefined;
 
   let me = null;
 
