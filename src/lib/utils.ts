@@ -58,7 +58,7 @@ export function parsePost(post, clip = true, url = "") {
       if (imageExtensions.includes(extension)) {
         text = text.replace(
           link,
-          `<img src="${link}" alt="Image" class="post-image" />`,
+          `<img src="https://corsproxy.io/?url=${link}" alt="Image" class="post-image" />`,
         );
       } else if (videoExtensions.includes(extension)) {
         text = text.replace(
