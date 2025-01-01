@@ -6,6 +6,10 @@ import { typeid } from "typeid-ts";
 export async function POST({ request }) {
   const { email, password, username, displayName } = await request.json();
 
+  if (email.endsWith("@ambrosia.gg")) {
+    return Response.json({ message: "Invalid email" }, { status: 400 });
+  }
+
   if (/[^a-zA-Z0-9_]/.test(username)) {
     return Response.json(
       { message: "Username can only contain letters, numbers and underscores" },

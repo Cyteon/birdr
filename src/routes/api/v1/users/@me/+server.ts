@@ -122,9 +122,10 @@ export async function PATCH({ request }) {
     let img = await sharp(buf);
     let { width, height } = await img.metadata();
     let size = Math.min(width, height);
+    img.webp({ quality: 80, lossless: false, force: true });
     buf = await img.toBuffer();
 
-    let key = `avatars/${user._id}.png`;
+    let key = `avatars/${user._id}.webp`;
 
     try {
       await s3.send(
@@ -140,7 +141,7 @@ export async function PATCH({ request }) {
         Bucket: "data",
         Key: key,
         Body: buf,
-        ContentType: "image/png",
+        ContentType: "image/webp",
       }),
     );
 
@@ -170,7 +171,7 @@ export async function DELETE({ request }) {
   await s3.send(
     new DeleteObjectCommand({
       Bucket: "data",
-      Key: `avatars/${user._id}.png`,
+      Key: `avatars/${user._id}.webp`,
     }),
   );
 
