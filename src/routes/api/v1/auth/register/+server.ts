@@ -6,8 +6,6 @@ import { typeid } from "typeid-ts";
 export async function POST({ request }) {
   const { email, password, username, displayName } = await request.json();
 
-  return Response.json({ message: "Your IP has been permanently banned and reported to the authorities." }, { status: 403 });
-
   if (/[^a-zA-Z0-9_]/.test(username)) {
     return Response.json(
       { message: "Username can only contain letters, numbers and underscores" },
