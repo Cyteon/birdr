@@ -4,7 +4,16 @@
 	import { onMount } from 'svelte';
 	import { getCookie, removeCookie } from 'typescript-cookie';
 	import { browser } from '$app/environment';
+	import { PUBLIC_WEBSITE_DOMAIN, PUBLIC_PLAUSIBLE_HOST } from '$env/static/public';
 	import cache from '$lib/cache';
+
+	if (browser) {
+		let script = document.createElement('script');
+		script.setAttribute('data-domain', PUBLIC_WEBSITE_DOMAIN);
+		script.setAttribute('src', `${PUBLIC_PLAUSIBLE_HOST}/js/script.js`);
+		script.setAttribute('defer', 'true');
+		document.head.appendChild(script);
+	}
 
 	let { children } = $props();
 
