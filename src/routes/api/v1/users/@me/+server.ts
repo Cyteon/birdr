@@ -164,7 +164,9 @@ export async function DELETE({ request }) {
 
   await User.findByIdAndDelete(user._id);
   await UsernameRedirect.deleteMany({ to: user.username });
-  await Relation.deleteMany({ $or: [{ userId: user._id }, { targetId: user._id }] });
+  await Relation.deleteMany({
+    $or: [{ userId: user._id }, { targetId: user._id }],
+  });
   await Post.deleteMany({ authorId: user._id });
   await Comment.deleteMany({ authorId: user._id });
 

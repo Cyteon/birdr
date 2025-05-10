@@ -9,7 +9,9 @@ export function parsePost(post, clip = true, url = "") {
     USE_PROFILES: { html: false },
   });
 
-  const rawImageData = post.content.match(/data:image\/\w+;base64,[^=]+={1,3}/g);
+  const rawImageData = post.content.match(
+    /data:image\/\w+;base64,[^=]+={1,3}/g,
+  );
 
   if (text.split("\n").length > 5 && clip) {
     text = text.split("\n").slice(0, 5).join("\n");
@@ -19,10 +21,11 @@ export function parsePost(post, clip = true, url = "") {
   if (text.length > 500 && clip) {
     if (rawImageData) {
       let lastImage = rawImageData[rawImageData.length - 1];
-      text = text.slice(0, text.indexOf(lastImage) + lastImage.length) + ` ... <a href="${url}">Read more</a>`;
+      text =
+        text.slice(0, text.indexOf(lastImage) + lastImage.length) +
+        ` ... <a href="${url}">Read more</a>`;
     } else {
       text = text.slice(0, 500) + ` ... <a href="${url}">Read more</a>`;
-
     }
   }
 
@@ -97,7 +100,6 @@ export function parsePost(post, clip = true, url = "") {
       embedded++;
     }
   }
-
 
   if (rawImageData) {
     for (let data of rawImageData) {

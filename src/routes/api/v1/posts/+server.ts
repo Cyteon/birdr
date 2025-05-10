@@ -4,7 +4,7 @@ import User from "$lib/models/User";
 import Comment from "$lib/models/Comment";
 import Relation from "$lib/models/Relation";
 import ogs from "open-graph-scraper";
-import moderate from "$lib/server/contentModerator.server"
+import moderate from "$lib/server/contentModerator.server";
 
 async function getOGData(post) {
   const links = post.content.match(/https?:\/\/[^\s]+/g);
@@ -58,13 +58,10 @@ export async function PUT({ request }) {
       return acc;
     }, {});
   }
-  
+
   let post = await Post.create({ content, authorId: user._id, mentions });
 
-  Promise.all([
-    getOGData(post),
-    moderate(post)
-  ])
+  Promise.all([getOGData(post), moderate(post)]);
 
   return Response.json(post);
 }
@@ -130,7 +127,7 @@ export async function GET({ request, url }) {
     .sort(sort2)
     .skip(offset)
     .limit(limit);
-  
+
   const commentCounts = await Comment.aggregate([
     { $group: { _id: "$postId", count: { $sum: 1 } } },
   ]);

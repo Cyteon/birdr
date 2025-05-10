@@ -27,7 +27,7 @@ export async function GET({ request, url }) {
       })
         .select("targetId")
         .lean();
-      
+
       filter.authorId = { $nin: blockedIds.map((b) => b.targetId) };
     }
   }

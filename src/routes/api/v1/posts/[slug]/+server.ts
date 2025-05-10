@@ -38,7 +38,7 @@ export async function GET({ params, request }) {
       "username displayName avatarUrl staff verified otherBadges",
     )
     .populate("mentions", "displayName");
-  
+
   post = post._doc;
 
   if (!post) {
